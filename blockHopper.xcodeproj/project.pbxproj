@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D0BA5371D3707830001074C /* button.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D0BA5361D3707830001074C /* button.png */; };
+		5D4138511D380F8E00844C1F /* MSButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4138501D380F8E00844C1F /* MSButtonNode.swift */; };
 		5D6438E71D36D8F200376F0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6438E61D36D8F200376F0B /* AppDelegate.swift */; };
 		5D6438E91D36D8F200376F0B /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D6438E81D36D8F200376F0B /* GameScene.sks */; };
 		5D6438EB1D36D8F200376F0B /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6438EA1D36D8F200376F0B /* GameScene.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D0BA5361D3707830001074C /* button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button.png; sourceTree = "<group>"; };
+		5D4138501D380F8E00844C1F /* MSButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MSButtonNode.swift; path = ../MSButtonNode.swift; sourceTree = "<group>"; };
 		5D6438E31D36D8F200376F0B /* blockHopper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockHopper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D6438E61D36D8F200376F0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5D6438E81D36D8F200376F0B /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -104,11 +108,13 @@
 				5D6438E61D36D8F200376F0B /* AppDelegate.swift */,
 				5D6438E81D36D8F200376F0B /* GameScene.sks */,
 				5D6438EA1D36D8F200376F0B /* GameScene.swift */,
+				5D4138501D380F8E00844C1F /* MSButtonNode.swift */,
 				5D6438EC1D36D8F200376F0B /* GameViewController.swift */,
 				5D6438EE1D36D8F200376F0B /* Main.storyboard */,
 				5D6438F11D36D8F200376F0B /* Assets.xcassets */,
 				5D6438F31D36D8F200376F0B /* LaunchScreen.storyboard */,
 				5D6438F61D36D8F200376F0B /* Info.plist */,
+				5D0BA5361D3707830001074C /* button.png */,
 			);
 			path = blockHopper;
 			sourceTree = "<group>";
@@ -237,6 +243,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D6438E91D36D8F200376F0B /* GameScene.sks in Resources */,
+				5D0BA5371D3707830001074C /* button.png in Resources */,
 				5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */,
 				5D6438F21D36D8F200376F0B /* Assets.xcassets in Resources */,
 				5D6438F01D36D8F200376F0B /* Main.storyboard in Resources */,
@@ -267,6 +274,7 @@
 				5D6438EB1D36D8F200376F0B /* GameScene.swift in Sources */,
 				5D6438ED1D36D8F200376F0B /* GameViewController.swift in Sources */,
 				5D6438E71D36D8F200376F0B /* AppDelegate.swift in Sources */,
+				5D4138511D380F8E00844C1F /* MSButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,6 +511,7 @@
 				5D6439111D36D8F200376F0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5D6439121D36D8F200376F0B /* Build configuration list for PBXNativeTarget "blockHopperTests" */ = {
 			isa = XCConfigurationList;
@@ -511,6 +520,7 @@
 				5D6439141D36D8F200376F0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5D6439151D36D8F200376F0B /* Build configuration list for PBXNativeTarget "blockHopperUITests" */ = {
 			isa = XCConfigurationList;
@@ -519,6 +529,7 @@
 				5D6439171D36D8F200376F0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
