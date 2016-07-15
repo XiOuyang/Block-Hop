@@ -37,6 +37,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
         
+        let tools = Tool(type: Tool.ToolType.circle)
+        addChild(tools)
+        
         
         /* Set physics contact delegate */
         physicsWorld.contactDelegate = self
