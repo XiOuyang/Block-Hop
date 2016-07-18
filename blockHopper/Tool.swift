@@ -10,12 +10,12 @@ import Foundation
 import SpriteKit
 
 
-class Tool: SKShapeNode {
+class Tool: SKNode {
     
     enum ToolType {
         case square, triangle, circle
     }
-
+    
     var tool : SKShapeNode!
     var type : ToolType!
     
@@ -23,27 +23,33 @@ class Tool: SKShapeNode {
         super.init()
         self.type = type
         self.userInteractionEnabled = true
-
+        
         switch type {
         case .square:
             tool = SKShapeNode(rectOfSize: CGSize(width: 50, height: 50))
-            tool.position = CGPoint(x: 50, y: 500)
+            tool.position = CGPoint(x: 0, y: 0)
             tool.fillColor = UIColor.cyanColor()
+            tool.name = "square"
             addChild(tool)
-            tool.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 100, height: 100))
+            tool.physicsBody = SKPhysicsBody(rectangleOfSize: tool.frame.size)
+            tool.physicsBody?.collisionBitMask = 1
             break
         case .circle:
-            tool = SKShapeNode(circleOfRadius: 30)
-            tool.position = CGPoint(x: 50, y: 450)
+            let radius : CGFloat = 30
+            tool = SKShapeNode(circleOfRadius: radius)
+            tool.position = CGPoint(x: 0, y: 0)
             tool.fillColor = UIColor.greenColor()
+            tool.name = "circle"
+            tool.physicsBody?.contactTestBitMask = 1
+            tool.physicsBody?.collisionBitMask = 1
             addChild(tool)
             
-            tool.physicsBody = SKPhysicsBody(circleOfRadius: 60)
+            tool.physicsBody = SKPhysicsBody(circleOfRadius: radius)
             break
         case .triangle:
             print("todo create triangle...")
         }
-        
+        zPosition = 2
         tool.physicsBody?.affectedByGravity = false
     }
     
@@ -54,15 +60,17 @@ class Tool: SKShapeNode {
     
     // MARK: - Touch handling
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-      print("touched \(type)")
+        print("touched \(type)")
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
+        for touch in touches{
+            self.tool.position = touch.locationInNode(self)
+        }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-
+        
     }
-    
 }

@@ -12,6 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var goLeft: Bool = false
     var goRight: Bool = false
+    var jumpCt = 0
     
     var player: SKSpriteNode!
     var goal: SKSpriteNode!
@@ -23,9 +24,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var rightLabel: SKLabelNode!
     var jumpLabel: SKLabelNode!
     
+    var circle : Tool!
+    var square : Tool!
+    var box : SKShapeNode!
+    
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
+        view.showsPhysics = true
         
         player = self.childNodeWithName("player") as! SKSpriteNode
         goal = self.childNodeWithName("goal") as! SKSpriteNode
@@ -37,8 +43,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
         
-        let tools = Tool(type: Tool.ToolType.circle)
-        addChild(tools)
+        box = SKShapeNode(rect:
+            CGRect(x: 0, y: 0, width: 100, height: frame.size.height - ground.size.height)
+            , cornerRadius: 30)
+        box.position = CGPoint(x: 0, y: ground.size.height)
+        box.zPosition = 1
+        box.fillColor = UIColor.whiteColor()
+        box.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: 100, height: frame.size.height - ground.size.height))
+        box.physicsBody?.collisionBitMask = 2
+        addChild(box)
+        
+        circle = Tool(type: Tool.ToolType.circle)
+        circle.position = CGPoint(x: 50, y: 100)
+        circle.tool.physicsBody?.affectedByGravity = false
+        box.addChild(circle)
+        
+        square = Tool(type: Tool.ToolType.square)
+        square.position = CGPoint(x: 50, y: 200)
+        square.tool.physicsBody?.affectedByGravity = false
+        square.tool.physicsBody?.dynamic = false
+        box.addChild(square)
         
         
         /* Set physics contact delegate */
@@ -58,6 +82,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    
     func leftStarted() {
         print("left started")
         goLeft = true
@@ -69,9 +94,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     func jumpStarted() {
-        print("jump started")
-        player.physicsBody?.applyImpulse(CGVectorMake(0, 40))
+        if jumpCt < 1 {
+            print("jump started")
+            player.physicsBody?.applyImpulse(CGVectorMake(0, 500))
+            jumpCt += 1
+        }
+        
     }
+    
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
@@ -85,8 +115,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if goLeft {
             player.physicsBody?.applyForce(CGVector(dx: -100, dy: 0))
         }
-        if player.physicsBody?.velocity.dy > 300 {
-            player.physicsBody?.velocity.dy = 300
+        if player.physicsBody?.velocity.dy > 530 {
+            player.physicsBody?.velocity.dy = 530
+        }
+        
+        if player.physicsBody?.velocity.dx > 200 {
+            player.physicsBody?.velocity.dx = 200
+        } else if player.physicsBody?.velocity.dx < -200 {
+            player.physicsBody?.velocity.dx = -200
         }
         
         
@@ -107,7 +143,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if nodeA.name == "player" && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
             print("hit goal")
+            jumpCt = 2
+        } else {
+            jumpCt = 0
+
         }
-        
-    }
+        if nodeA.name == "player" && nodeB.name == "circle" || nodeA.name == "circle" && nodeB.name == "player" {
+            circle.tool.physicsBody?.affectedByGravity = true
+        } else {
+            print("nil")
+        }
+            }
+    
 }
