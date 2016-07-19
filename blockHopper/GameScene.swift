@@ -10,6 +10,13 @@ import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    enum GameState {
+        case Setup, Play
+    }
+    
+    var currState: GameState = .Setup
+    
+    
     var goLeft: Bool = false
     var goRight: Bool = false
     var jumpCt = 0
@@ -27,7 +34,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var circle : Tool!
     var square : Tool!
     var box : SKShapeNode!
-    
+    var dragObject: Tool?
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -54,15 +61,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(box)
         
         circle = Tool(type: Tool.ToolType.circle)
-        circle.position = CGPoint(x: 50, y: 100)
-        circle.tool.physicsBody?.affectedByGravity = false
-        box.addChild(circle)
+        circle.position = CGPoint(x: 30, y: 400)
+        self.addChild(circle)
         
         square = Tool(type: Tool.ToolType.square)
-        square.position = CGPoint(x: 50, y: 200)
-        square.tool.physicsBody?.affectedByGravity = false
-        square.tool.physicsBody?.dynamic = false
-        box.addChild(square)
+        square.position = CGPoint(x: 30, y: 500)
+        self.addChild(square)
         
         
         /* Set physics contact delegate */
@@ -82,7 +86,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    
     func leftStarted() {
         print("left started")
         goLeft = true
@@ -101,11 +104,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
     }
-    
+
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
+        print("gamescene touches began")
+        for touch in touches {
+            let location = touch.locationInNode(self)
+            let touchedNode = nodeAtPoint(location)
+            if let tool = touchedNode as? Tool {
+                currState = .Setup
+                dragObject = tool
+            }
+        }
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
+        for touch in touches {
+            let location = touch.locationInNode(self)
+            if let tool = dragObject {
+                tool.position = location
+            }
+         
+        }
+            
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        dragObject = nil
+        if currState == .Setup {
+            currState = .Play
+        }
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -123,6 +153,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.physicsBody?.velocity.dx = 200
         } else if player.physicsBody?.velocity.dx < -200 {
             player.physicsBody?.velocity.dx = -200
+        }
+        
+        if currState == .Setup {
+            self.player.physicsBody?.dynamic = false
+        } else {
+            self.player.physicsBody?.dynamic = true
         }
         
         
@@ -146,13 +182,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             jumpCt = 2
         } else {
             jumpCt = 0
-
         }
-        if nodeA.name == "player" && nodeB.name == "circle" || nodeA.name == "circle" && nodeB.name == "player" {
-            circle.tool.physicsBody?.affectedByGravity = true
-        } else {
-            print("nil")
-        }
-            }
+        
+    }
     
 }

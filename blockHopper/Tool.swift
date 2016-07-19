@@ -10,67 +10,45 @@ import Foundation
 import SpriteKit
 
 
-class Tool: SKNode {
+class Tool: SKShapeNode {
     
     enum ToolType {
         case square, triangle, circle
     }
     
-    var tool : SKShapeNode!
     var type : ToolType!
+    var isPlay : Bool = false
     
     init(type: ToolType) {
         super.init()
         self.type = type
-        self.userInteractionEnabled = true
         
         switch type {
         case .square:
-            tool = SKShapeNode(rectOfSize: CGSize(width: 50, height: 50))
-            tool.position = CGPoint(x: 0, y: 0)
-            tool.fillColor = UIColor.cyanColor()
-            tool.name = "square"
-            addChild(tool)
-            tool.physicsBody = SKPhysicsBody(rectangleOfSize: tool.frame.size)
-            tool.physicsBody?.collisionBitMask = 1
+            self.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: 50, height: 50), nil)
+            fillColor = UIColor.cyanColor()
             break
         case .circle:
-            let radius : CGFloat = 30
-            tool = SKShapeNode(circleOfRadius: radius)
-            tool.position = CGPoint(x: 0, y: 0)
-            tool.fillColor = UIColor.greenColor()
-            tool.name = "circle"
-            tool.physicsBody?.contactTestBitMask = 1
-            tool.physicsBody?.collisionBitMask = 1
-            addChild(tool)
+            self.path = CGPathCreateWithEllipseInRect(CGRect(x: 0, y: 0, width: 50, height: 50), nil)
+            fillColor = UIColor.greenColor()
             
-            tool.physicsBody = SKPhysicsBody(circleOfRadius: radius)
             break
         case .triangle:
             print("todo create triangle...")
         }
         zPosition = 2
-        tool.physicsBody?.affectedByGravity = false
+        physicsBody = SKPhysicsBody(edgeChainFromPath: path!)
+        physicsBody?.collisionBitMask = 1
+        physicsBody?.affectedByGravity = false
+        name =  "tool"
+        
     }
+    
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     
-    // MARK: - Touch handling
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        print("touched \(type)")
-    }
-    
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-        for touch in touches{
-            self.tool.position = touch.locationInNode(self)
-        }
-    }
-    
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
-    }
 }
