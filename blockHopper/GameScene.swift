@@ -10,15 +10,19 @@ import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
+    //enum to keep track of game state
     enum GameState {
         case Setup, Play
     }
     
+    //holds game state enum type
     var currState: GameState = .Setup
     
-    
+    //keeps track of if you will move or not
     var goLeft: Bool = false
     var goRight: Bool = false
+    
+    //keeps track of jump counter
     var jumpCt = 0
     
     var player: SKSpriteNode!
@@ -30,7 +34,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var leftLabel: SKLabelNode!
     var rightLabel: SKLabelNode!
     var jumpLabel: SKLabelNode!
+    var background : SKSpriteNode!
     
+    //initialize objects in game scene
     var circle : Tool!
     var square : Tool!
     var box : SKShapeNode!
@@ -40,6 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Setup your scene here */
         view.showsPhysics = true
         
+        //sets up connections with scene props
         player = self.childNodeWithName("player") as! SKSpriteNode
         goal = self.childNodeWithName("goal") as! SKSpriteNode
         ground = self.childNodeWithName("ground") as! SKSpriteNode
@@ -49,7 +56,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftLabel = left.childNodeWithName("leftLabel") as! SKLabelNode
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
+        background = self.childNodeWithName("background") as! SKSpriteNode
         
+        //generates space for the objects
         box = SKShapeNode(rect:
             CGRect(x: 0, y: 0, width: 100, height: frame.size.height - ground.size.height)
             , cornerRadius: 30)
@@ -60,10 +69,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         box.physicsBody?.collisionBitMask = 2
         addChild(box)
         
+        //generate circle object
         circle = Tool(type: Tool.ToolType.circle)
         circle.position = CGPoint(x: 30, y: 400)
         self.addChild(circle)
         
+        //generate square object
         square = Tool(type: Tool.ToolType.square)
         square.position = CGPoint(x: 30, y: 500)
         self.addChild(square)
@@ -72,10 +83,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Set physics contact delegate */
         physicsWorld.contactDelegate = self
         
+        //if buttons are clicked, call movement functions
         left.selectionBegan = leftStarted
         right.selectionBegan = rightStarted
         jump.selectionBegan = jumpStarted
         
+        //when not clicking, the functions end
         left.selectionEnded = {
             self.goLeft = false
         }
@@ -86,6 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    //move functions
     func leftStarted() {
         print("left started")
         goLeft = true
@@ -97,6 +111,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     func jumpStarted() {
+        //limits jumps to only 1
         if jumpCt < 1 {
             print("jump started")
             player.physicsBody?.applyImpulse(CGVectorMake(0, 500))
@@ -104,16 +119,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
     }
-
+    
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
         print("gamescene touches began")
+        
+        //for all your touches on screen
         for touch in touches {
+            
+            //location is where you touched
             let location = touch.locationInNode(self)
+            
+            //touched node is whatever node you touched
             let touchedNode = nodeAtPoint(location)
+            
+            //if node touched is a 'tool'
             if let tool = touchedNode as? Tool {
+                
+                //state set to setup
                 currState = .Setup
+                //object you are dragging is the tool
                 dragObject = tool
             }
         }
@@ -126,16 +152,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let tool = dragObject {
                 tool.position = location
             }
-         
-        }
             
+        }
+        
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        dragObject = nil
-        if currState == .Setup {
-            currState = .Play
+        
+        if let tool = dragObject {
+
+            var touchedNode = nodesAtPoint(tool.position)
+            if touchedNode[1].name == "background" {
+                dragObject = nil
+                print("on background")
+                if currState == .Setup {
+                    currState = .Play
+                }
+            } else {
+                if dragObject?.type == Tool.ToolType.circle {
+                dragObject?.position = CGPoint(x: 30, y: 400)
+                dragObject = nil
+                } else if dragObject?.type == Tool.ToolType.square {
+                    dragObject?.position = CGPoint(x: 30, y: 500)
+                    dragObject = nil
+                }
+                
+            }
+            
+//            if touchedNode.name == "background" {
+//                print("on background")
+//            }
         }
+//        if dragObject?.position.y >= ground.position.y {
+//            dragObject = nil
+//            if currState == .Setup {
+//                currState = .Play
+//            }
+//        } else {
+//            dragObject?.position = CGPoint(x: 30, y: 400)
+//            dragObject = nil
+//            if currState == .Setup {
+//                currState = .Play
+//            }
+//        }
     }
     
     override func update(currentTime: CFTimeInterval) {
@@ -156,6 +215,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if currState == .Setup {
+            self.player.position = CGPoint(x: 150, y: 226)
             self.player.physicsBody?.dynamic = false
         } else {
             self.player.physicsBody?.dynamic = true
