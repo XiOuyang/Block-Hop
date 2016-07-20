@@ -16,7 +16,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //holds game state enum type
-    var currState: GameState = .Setup
+    var currState: GameState = .Setup{
+        didSet {
+            switch currState {
+            case .Setup:
+                
+                //return player to start position
+                self.player.position = CGPoint(x: 200, y: 240)
+                //can't move player
+                self.player.physicsBody?.dynamic = false
+                break
+            case .Play:
+                self.player.physicsBody?.dynamic = true
+                
+                break
+            }
+        }
+    }
     
     //keeps track of if you will move or not
     var goLeft: Bool = false
@@ -25,6 +41,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //keeps track of jump counter
     var jumpCt = 0
     
+    //scene props
     var player: SKSpriteNode!
     var goal: SKSpriteNode!
     var ground: SKSpriteNode!
@@ -34,7 +51,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var leftLabel: SKLabelNode!
     var rightLabel: SKLabelNode!
     var jumpLabel: SKLabelNode!
-    var background : SKSpriteNode!
     
     //initialize objects in game scene
     var circle : Tool!
@@ -56,27 +72,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftLabel = left.childNodeWithName("leftLabel") as! SKLabelNode
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
-        background = self.childNodeWithName("background") as! SKSpriteNode
+        
+        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
+            height: self.frame.size.height))
+        self.physicsBody?.affectedByGravity = false
+        self.physicsBody?.dynamic = false
+        
+        
+        
         
         //generates space for the objects
         box = SKShapeNode(rect:
-            CGRect(x: 0, y: 0, width: 100, height: frame.size.height - ground.size.height)
+            CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height)
             , cornerRadius: 30)
         box.position = CGPoint(x: 0, y: ground.size.height)
         box.zPosition = 1
         box.fillColor = UIColor.whiteColor()
-        box.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: 100, height: frame.size.height - ground.size.height))
+        box.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height))
         box.physicsBody?.collisionBitMask = 2
         addChild(box)
         
         //generate circle object
-        circle = Tool(type: Tool.ToolType.circle)
-        circle.position = CGPoint(x: 30, y: 400)
+        circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 20, y: 400))
         self.addChild(circle)
         
         //generate square object
-        square = Tool(type: Tool.ToolType.square)
-        square.position = CGPoint(x: 30, y: 500)
+        square = Tool(type: Tool.ToolType.square, homePos: CGPoint(x: 20, y: 500))
         self.addChild(square)
         
         
@@ -96,7 +117,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.goRight = false
         }
         jump.selectionEnded = {}
-        
     }
     
     //move functions
@@ -114,12 +134,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //limits jumps to only 1
         if jumpCt < 1 {
             print("jump started")
-            player.physicsBody?.applyImpulse(CGVectorMake(0, 500))
+            player.physicsBody?.applyImpulse(CGVectorMake(0, 600))
             jumpCt += 1
         }
-        
     }
-    
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         /* Called when a touch begins */
@@ -149,78 +167,51 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         for touch in touches {
             let location = touch.locationInNode(self)
+            //if you touched a tool
             if let tool = dragObject {
+                //tool moves to where you drag
                 tool.position = location
             }
-            
         }
-        
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        
+        //if you're dragging the tool
         if let tool = dragObject {
-
-            var touchedNode = nodesAtPoint(tool.position)
-            if touchedNode[1].name == "background" {
-                dragObject = nil
-                print("on background")
-                if currState == .Setup {
-                    currState = .Play
-                }
-            } else {
-                if dragObject?.type == Tool.ToolType.circle {
-                dragObject?.position = CGPoint(x: 30, y: 400)
-                dragObject = nil
-                } else if dragObject?.type == Tool.ToolType.square {
-                    dragObject?.position = CGPoint(x: 30, y: 500)
-                    dragObject = nil
-                }
-                
-            }
             
-//            if touchedNode.name == "background" {
-//                print("on background")
-//            }
+            let touchedNode = nodesAtPoint(tool.position)
+            
+            if touchedNode.count > 1 {
+                tool.position = tool.homePos
+            } else if currState == .Setup {
+                currState = .Play
+            }
+            dragObject = nil
+            
         }
-//        if dragObject?.position.y >= ground.position.y {
-//            dragObject = nil
-//            if currState == .Setup {
-//                currState = .Play
-//            }
-//        } else {
-//            dragObject?.position = CGPoint(x: 30, y: 400)
-//            dragObject = nil
-//            if currState == .Setup {
-//                currState = .Play
-//            }
-//        }
     }
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
+        
+        //if buttons clicked, apply force corresponding to desired direction
         if goRight {
-            player.physicsBody?.applyForce(CGVector(dx: 100, dy: 0))
+            player.physicsBody?.applyForce(CGVector(dx: 130, dy: 0))
         } else if goLeft {
-            player.physicsBody?.applyForce(CGVector(dx: -100, dy: 0))
+            player.physicsBody?.applyForce(CGVector(dx: -130, dy: 0))
         }
+        
+        // caps jumping height
         if player.physicsBody?.velocity.dy > 530 {
             player.physicsBody?.velocity.dy = 530
         }
         
+        //caps speed
         if player.physicsBody?.velocity.dx > 200 {
             player.physicsBody?.velocity.dx = 200
         } else if player.physicsBody?.velocity.dx < -200 {
             player.physicsBody?.velocity.dx = -200
         }
-        
-        if currState == .Setup {
-            self.player.position = CGPoint(x: 150, y: 226)
-            self.player.physicsBody?.dynamic = false
-        } else {
-            self.player.physicsBody?.dynamic = true
-        }
-        
         
     }
     
@@ -234,16 +225,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let nodeA = contactA.node!
         let nodeB = contactB.node!
         
-        //        print(nodeA.name!)
-        //        print(nodeB.name!)
-        
+        //if player is touching goal, cannot jump
         if nodeA.name == "player" && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
             print("hit goal")
             jumpCt = 2
         } else {
             jumpCt = 0
         }
-        
     }
-    
 }

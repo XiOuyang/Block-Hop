@@ -18,21 +18,24 @@ class Tool: SKShapeNode {
     }
     //holds enum type
     var type : ToolType!
+    var homePos : CGPoint!
     
     //init to inherit properties from gamescene
-    init(type: ToolType) {
+    init(type: ToolType, homePos: CGPoint!) {
         super.init()
         self.type = type
+        self.homePos = homePos
+        position = homePos
         
         switch type {
         //generates square
         case .square:
-            self.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: 50, height: 50), nil)
+            self.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: 80, height: 80), nil)
             fillColor = UIColor.cyanColor()
             break
         //generates circle
         case .circle:
-            self.path = CGPathCreateWithEllipseInRect(CGRect(x: 0, y: 0, width: 50, height: 50), nil)
+            self.path = CGPathCreateWithEllipseInRect(CGRect(x: 0, y: 0, width: 80, height: 80), nil)
             fillColor = UIColor.greenColor()
             
             break
