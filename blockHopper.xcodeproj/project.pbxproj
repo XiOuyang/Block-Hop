@@ -18,6 +18,8 @@
 		5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D6438F31D36D8F200376F0B /* LaunchScreen.storyboard */; };
 		5D6439001D36D8F200376F0B /* blockHopperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6438FF1D36D8F200376F0B /* blockHopperTests.swift */; };
 		5D64390B1D36D8F200376F0B /* blockHopperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D64390A1D36D8F200376F0B /* blockHopperUITests.swift */; };
+		5DADF99D1D414C560066346D /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DADF99C1D414C560066346D /* square.png */; };
+		5DADF99F1D414E290066346D /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DADF99E1D414E290066346D /* circle.png */; };
 		5DF66EC61D3946D800049536 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF66EC51D3946D800049536 /* Tool.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +58,8 @@
 		5D6439061D36D8F200376F0B /* blockHopperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockHopperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D64390A1D36D8F200376F0B /* blockHopperUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blockHopperUITests.swift; sourceTree = "<group>"; };
 		5D64390C1D36D8F200376F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5DADF99C1D414C560066346D /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
+		5DADF99E1D414E290066346D /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
 		5DF66EC51D3946D800049536 /* Tool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,6 +122,8 @@
 				5D6438F31D36D8F200376F0B /* LaunchScreen.storyboard */,
 				5D6438F61D36D8F200376F0B /* Info.plist */,
 				5D0BA5361D3707830001074C /* button.png */,
+				5DADF99E1D414E290066346D /* circle.png */,
+				5DADF99C1D414C560066346D /* square.png */,
 			);
 			path = blockHopper;
 			sourceTree = "<group>";
@@ -249,6 +255,8 @@
 				5D0BA5371D3707830001074C /* button.png in Resources */,
 				5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */,
 				5D6438F21D36D8F200376F0B /* Assets.xcassets in Resources */,
+				5DADF99F1D414E290066346D /* circle.png in Resources */,
+				5DADF99D1D414C560066346D /* square.png in Resources */,
 				5D6438F01D36D8F200376F0B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

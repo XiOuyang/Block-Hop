@@ -52,6 +52,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var rightLabel: SKLabelNode!
     var jumpLabel: SKLabelNode!
     var uiLayer: SKNode!
+    var light: SKLightNode!
+    var lightOn : Bool = false
     
     //initialize objects in game scene
     var circle : Tool!
@@ -74,6 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftLabel = left.childNodeWithName("leftLabel") as! SKLabelNode
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
+        light = self.childNodeWithName("light") as! SKLightNode
         
         //sets up boundary so you can't go off-screen
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
@@ -162,6 +165,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 currState = .Setup
                 //object you are dragging is the tool
                 dragObject = tool
+                tool.physicsBody?.collisionBitMask = 0
             }
         }
     }
@@ -193,6 +197,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //if tool intersects another tool
                 if  intersect {
                     tool.position = tool.homePos
+                    tool.physicsBody?.collisionBitMask = 1
                     break
                 }
             }
@@ -246,5 +251,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else {
             jumpCt = 0
         }
+        //check collision
+        if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
+            //is it node A?
+            if let tool = nodeA as? Tool {
+                // let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)
+                light.shadowColor = UIColor(white: 0, alpha: 0.6)
+                tool.shadow()
+                //    //is it node B?
+            } else if let tool = nodeB as? Tool {
+                light.shadowColor = UIColor(white: 0, alpha: 0.6)
+                
+                tool.shadow()
+            }
+        }
+    }
+    
+    func didEndContact(contact: SKPhysicsContact) {
+        
+        let contactA:SKPhysicsBody = contact.bodyA
+        let contactB:SKPhysicsBody = contact.bodyB
+        
+        /* Get references to the physics body parent nodes */
+        let nodeA = contactA.node!
+        let nodeB = contactB.node!
+        
+        if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
+            //is it node A?
+            if let tool = nodeA as? Tool {
+                player.shadowCastBitMask = 1
+                tool.light()
+                //    //is it node B?
+            } else if let tool = nodeB as? Tool {
+                player.shadowCastBitMask = 1
+                tool.light()
+            }
+        }
     }
 }
+
+//is it node A?
+//if let tool = nodeA as? Tool {
+//    tool.shadow()
+//    //is it node B?
+//} else if let tool = nodeB as? Tool {
+//    tool.shadow()
+//}
