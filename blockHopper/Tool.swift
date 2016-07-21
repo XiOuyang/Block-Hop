@@ -46,7 +46,11 @@ class Tool: SKShapeNode {
         zPosition = 2
         physicsBody = SKPhysicsBody(edgeChainFromPath: path!)
         physicsBody?.collisionBitMask = 1
+        physicsBody?.categoryBitMask = 1
         physicsBody?.affectedByGravity = false
+        
+        
+        
         name =  "tool"
         
     }

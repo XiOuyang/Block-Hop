@@ -51,6 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var leftLabel: SKLabelNode!
     var rightLabel: SKLabelNode!
     var jumpLabel: SKLabelNode!
+    var uiLayer: SKNode!
     
     //initialize objects in game scene
     var circle : Tool!
@@ -63,16 +64,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view.showsPhysics = true
         
         //sets up connections with scene props
+        uiLayer = self.childNodeWithName("hudLayer")!
         player = self.childNodeWithName("player") as! SKSpriteNode
         goal = self.childNodeWithName("goal") as! SKSpriteNode
         ground = self.childNodeWithName("ground") as! SKSpriteNode
-        left = self.childNodeWithName("left") as! MSButtonNode
-        right = self.childNodeWithName("right") as! MSButtonNode
-        jump = self.childNodeWithName("jump") as! MSButtonNode
+        left = uiLayer.childNodeWithName("left") as! MSButtonNode
+        right = uiLayer.childNodeWithName("right") as! MSButtonNode
+        jump = uiLayer.childNodeWithName("jump") as! MSButtonNode
         leftLabel = left.childNodeWithName("leftLabel") as! SKLabelNode
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
         
+        //sets up boundary so you can't go off-screen
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
             height: self.frame.size.height))
         self.physicsBody?.affectedByGravity = false
@@ -179,17 +182,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //if you're dragging the tool
         if let tool = dragObject {
             
-            let touchedNode = nodesAtPoint(tool.position)
-            
-            if touchedNode.count > 1 {
-                tool.position = tool.homePos
-            } else if currState == .Setup {
-                currState = .Play
+            //looping through all children of the scene
+            for node in self.children {
+                if node == tool {
+                    continue
+                }
+                // sets up intersection check
+                let intersect : Bool = tool.intersectsNode(node)
+                
+                //if tool intersects another tool
+                if  intersect {
+                    tool.position = tool.homePos
+                    break
+                }
             }
-            dragObject = nil
-            
         }
+        //change game state
+        if currState == .Setup {
+            currState = .Play
+        }
+        dragObject = nil
     }
+    
     
     override func update(currentTime: CFTimeInterval) {
         /* Called before each frame is rendered */
