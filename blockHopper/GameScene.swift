@@ -84,7 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.dynamic = false
         
-        
+        lightUp()
         
         
         //generates space for the objects
@@ -118,21 +118,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //when not clicking, the functions end
         left.selectionEnded = {
             self.goLeft = false
+            self.player.lightingBitMask = 0
         }
         right.selectionEnded = {
             self.goRight = false
+            self.player.lightingBitMask = 0
         }
-        jump.selectionEnded = {}
+        jump.selectionEnded = {self.player.lightingBitMask = 0}
     }
     
     //move functions
     func leftStarted() {
         print("left started")
+        //particleEff()
+        self.player.lightingBitMask = 2
         goLeft = true
         
     }
     func rightStarted() {
         print("right started")
+        //particleEff()
+        self.player.lightingBitMask = 2
         goRight = true
         
     }
@@ -140,12 +146,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //limits jumps to only 1
         if jumpCt < 1 {
             print("jump started")
+            //particleEff()
+            self.player.lightingBitMask = 2
             player.physicsBody?.applyImpulse(CGVectorMake(0, 600))
             jumpCt += 1
         }
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
         /* Called when a touch begins */
         print("gamescene touches began")
         
@@ -253,13 +262,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         //check collision
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
+           
             //is it node A?
             if let tool = nodeA as? Tool {
                 // let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)
+                
+                 particleEff(tool.position, tool: tool, light: light)
                 light.shadowColor = UIColor(white: 0, alpha: 0.6)
                 tool.shadow()
                 //    //is it node B?
             } else if let tool = nodeB as? Tool {
+                particleEff(tool.position, tool: tool, light: light)
                 light.shadowColor = UIColor(white: 0, alpha: 0.6)
                 
                 tool.shadow()
@@ -279,21 +292,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
             //is it node A?
             if let tool = nodeA as? Tool {
-                player.shadowCastBitMask = 1
+                
                 tool.light()
                 //    //is it node B?
             } else if let tool = nodeB as? Tool {
-                player.shadowCastBitMask = 1
                 tool.light()
             }
         }
     }
-}
+    
+    func particleEff(position: CGPoint, tool: SKSpriteNode, light: SKLightNode) {
+        let particle = SKEmitterNode(fileNamed: "FireFly")
+        particle?.position = position
+        particle?.zPosition = 11
+        particle?.numParticlesToEmit = 55
+        
+        let xPos = light.position.x - tool.position.x
+        let yPos = light.position.y - tool.position.y
+        let desiredAng = atan2(yPos, xPos)
+        particle?.emissionAngle = desiredAng
+        
+        addChild(particle!)
+    }
+    
+    func lightUp() {
+        let light = SKLightNode()
+        light.categoryBitMask = 2
+        light.zPosition = -10
+        light.ambientColor = UIColor.blackColor()
+        light.falloff = 1
+        light.position = CGPoint(x: 0, y: 0)
+        light.lightColor = UIColor.whiteColor()
+        player.addChild(light)
+    }
+    
+    }
 
-//is it node A?
-//if let tool = nodeA as? Tool {
-//    tool.shadow()
-//    //is it node B?
-//} else if let tool = nodeB as? Tool {
-//    tool.shadow()
-//}

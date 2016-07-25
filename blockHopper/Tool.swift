@@ -35,18 +35,12 @@ class Tool: SKSpriteNode {
         //generates square
         case .square:
             texture = SKTexture(imageNamed: "square")
-            super.init(texture: texture, color: UIColor.blueColor(), size: CGSize(width: 80, height: 80))
-            //self.path = CGPathCreateWithRect(CGRect(x: 0, y: 0, width: 80, height: 80), nil)
-            //fillColor = UIColor.cyanColor()
-            
+            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 80, height: 80))
             break
         //generates circle
         case .circle:
             texture = SKTexture(imageNamed: "circle")
             super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 80, height: 80))
-            
-            //            self.path = CGPathCreateWithEllipseInRect(CGRect(x: 0, y: 0, width: 80, height: 80), nil)
-            //            fillColor = UIColor.greenColor()
             break
         case .triangle:
             super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 80, height: 80))
@@ -54,7 +48,6 @@ class Tool: SKSpriteNode {
         }
         self.position = homePos
         colorBlendFactor = 0.5
-        //shadowCastBitMask = 1
         
         //sets properties of tools
         zPosition = 2
@@ -62,7 +55,6 @@ class Tool: SKSpriteNode {
         physicsBody?.collisionBitMask = 1
         physicsBody?.affectedByGravity = false
         physicsBody?.allowsRotation = false
-        
         name =  "tool"
     }
     
