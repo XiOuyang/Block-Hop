@@ -53,8 +53,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var jumpLabel: SKLabelNode!
     var uiLayer: SKNode!
     var light: SKLightNode!
-    var lightOn : Bool = false
-    
     //initialize objects in game scene
     var circle : Tool!
     var square : Tool!
@@ -224,9 +222,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //if buttons clicked, apply force corresponding to desired direction
         if goRight {
-            player.physicsBody?.applyForce(CGVector(dx: 130, dy: 0))
+            player.physicsBody?.applyForce(CGVector(dx: 200, dy: 0))
         } else if goLeft {
-            player.physicsBody?.applyForce(CGVector(dx: -130, dy: 0))
+            player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
         }
         
         // caps jumping height
@@ -262,7 +260,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         //check collision
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
-           
+            player.runAction(SKAction.scaleTo(0.8, duration: 0.5))
             //is it node A?
             if let tool = nodeA as? Tool {
                 // let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)
@@ -290,9 +288,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let nodeB = contactB.node!
         
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
+             player.runAction(SKAction.scaleTo(1.2, duration: 0.5))
             //is it node A?
             if let tool = nodeA as? Tool {
-                
                 tool.light()
                 //    //is it node B?
             } else if let tool = nodeB as? Tool {
@@ -302,17 +300,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func particleEff(position: CGPoint, tool: SKSpriteNode, light: SKLightNode) {
-        let particle = SKEmitterNode(fileNamed: "FireFly")
-        particle?.position = position
-        particle?.zPosition = 11
-        particle?.numParticlesToEmit = 55
+        var particle = SKEmitterNode(fileNamed: "FireFly")!
+        particle.position = position
+        particle.zPosition = 11
+        particle.numParticlesToEmit = 55
+        
+        addChild(particle)
         
         let xPos = light.position.x - tool.position.x
         let yPos = light.position.y - tool.position.y
         let desiredAng = atan2(yPos, xPos)
-        particle?.emissionAngle = desiredAng
+        particle.emissionAngle = desiredAng
+
+        let delay = SKAction.waitForDuration(2)
+        let delete = SKAction.runBlock({
+            particle.removeFromParent()
+        })
+        runAction(SKAction.sequence([delay, delete]))
         
-        addChild(particle!)
+        
     }
     
     func lightUp() {

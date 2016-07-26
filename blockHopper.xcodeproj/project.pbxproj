@@ -20,6 +20,9 @@
 		5D64390B1D36D8F200376F0B /* blockHopperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D64390A1D36D8F200376F0B /* blockHopperUITests.swift */; };
 		5DADF99D1D414C560066346D /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DADF99C1D414C560066346D /* square.png */; };
 		5DADF99F1D414E290066346D /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DADF99E1D414E290066346D /* circle.png */; };
+		5DEF3DE71D46D0C300C89E5E /* TitlePage.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DEF3DE61D46D0C300C89E5E /* TitlePage.sks */; };
+		5DEF3DE91D46D7DF00C89E5E /* rect.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DEF3DE81D46D7DF00C89E5E /* rect.png */; };
+		5DEF3DEB1D46DBE700C89E5E /* Instructions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DEF3DEA1D46DBE700C89E5E /* Instructions.sks */; };
 		5DF3C8071D428B7F00F8ACD9 /* FireFly.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DF3C8051D428B7F00F8ACD9 /* FireFly.sks */; };
 		5DF3C8081D428B7F00F8ACD9 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF3C8061D428B7F00F8ACD9 /* spark.png */; };
 		5DF66EC61D3946D800049536 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF66EC51D3946D800049536 /* Tool.swift */; };
@@ -62,6 +65,9 @@
 		5D64390C1D36D8F200376F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5DADF99C1D414C560066346D /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
 		5DADF99E1D414E290066346D /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
+		5DEF3DE61D46D0C300C89E5E /* TitlePage.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = TitlePage.sks; path = ../TitlePage.sks; sourceTree = "<group>"; };
+		5DEF3DE81D46D7DF00C89E5E /* rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rect.png; sourceTree = "<group>"; };
+		5DEF3DEA1D46DBE700C89E5E /* Instructions.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Instructions.sks; sourceTree = "<group>"; };
 		5DF3C8051D428B7F00F8ACD9 /* FireFly.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireFly.sks; sourceTree = "<group>"; };
 		5DF3C8061D428B7F00F8ACD9 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		5DF66EC51D3946D800049536 /* Tool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
@@ -116,6 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				5D6438E61D36D8F200376F0B /* AppDelegate.swift */,
+				5DEF3DE61D46D0C300C89E5E /* TitlePage.sks */,
+				5DEF3DEA1D46DBE700C89E5E /* Instructions.sks */,
 				5D6438E81D36D8F200376F0B /* GameScene.sks */,
 				5D6438EA1D36D8F200376F0B /* GameScene.swift */,
 				5DF3C8051D428B7F00F8ACD9 /* FireFly.sks */,
@@ -130,6 +138,7 @@
 				5D0BA5361D3707830001074C /* button.png */,
 				5DADF99E1D414E290066346D /* circle.png */,
 				5DADF99C1D414C560066346D /* square.png */,
+				5DEF3DE81D46D7DF00C89E5E /* rect.png */,
 			);
 			path = blockHopper;
 			sourceTree = "<group>";
@@ -257,11 +266,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DEF3DEB1D46DBE700C89E5E /* Instructions.sks in Resources */,
 				5D6438E91D36D8F200376F0B /* GameScene.sks in Resources */,
 				5DF3C8081D428B7F00F8ACD9 /* spark.png in Resources */,
 				5D0BA5371D3707830001074C /* button.png in Resources */,
+				5DEF3DE91D46D7DF00C89E5E /* rect.png in Resources */,
 				5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */,
 				5DF3C8071D428B7F00F8ACD9 /* FireFly.sks in Resources */,
+				5DEF3DE71D46D0C300C89E5E /* TitlePage.sks in Resources */,
 				5D6438F21D36D8F200376F0B /* Assets.xcassets in Resources */,
 				5DADF99F1D414E290066346D /* circle.png in Resources */,
 				5DADF99D1D414C560066346D /* square.png in Resources */,
