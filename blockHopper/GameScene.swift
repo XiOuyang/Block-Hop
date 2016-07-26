@@ -66,7 +66,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         uiLayer = self.childNodeWithName("hudLayer")!
         player = self.childNodeWithName("player") as! Player
         goal = self.childNodeWithName("goal") as! SKSpriteNode
-        ground = self.childNodeWithName("ground") as! SKSpriteNode
+        ground = self.childNodeWithName(Constants.ground) as! SKSpriteNode
         left = uiLayer.childNodeWithName("left") as! MSButtonNode
         right = uiLayer.childNodeWithName("right") as! MSButtonNode
         jump = uiLayer.childNodeWithName("jump") as! MSButtonNode
@@ -81,8 +81,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.dynamic = false
         
-        lightUp()
-        
+        player.lightUp()
         
         //generates space for the objects
         box = SKShapeNode(rect:
@@ -126,18 +125,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //move functions
     func leftStarted() {
-        print("left started")
-        //particleEff()
-        self.player.lightingBitMask = 2
-        goLeft = true
-        
+       goLeft = player.moveLeft()
     }
     func rightStarted() {
-        print("right started")
-        //particleEff()
-        self.player.lightingBitMask = 2
-        goRight = true
-        
+       goRight = player.moveRight()
     }
     func jumpStarted() {
         player.jump()
@@ -245,13 +236,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let nodeB = contactB.node!
         
         //if player is touching goal, cannot jump
-        if nodeA.name == "player" && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
+        if nodeA.name == Constants.player && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
             print("hit goal")
             
             player.jumpCount = 2
         }
         
-        if nodeA.name == "player" && nodeB.name == "ground" || nodeA.name == "ground" && nodeB.name == "player" {
+        if nodeA.name == "player" && nodeB.name == Constants.ground || nodeA.name == "ground" && nodeB.name == "player" {
             player.jumpCount = 0
         }
         //check collision
@@ -261,12 +252,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let tool = nodeA as? Tool {
                 // let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)
                 
-                fireflyEffect(tool.position, tool: tool, light: light)
+                tool.fireflyEffect(light)
                 light.shadowColor = UIColor(white: 0, alpha: 0.6)
                 tool.shadow()
                 //    //is it node B?
             } else if let tool = nodeB as? Tool {
-                fireflyEffect(tool.position, tool: tool, light: light)
+                tool.fireflyEffect(light)
                 light.shadowColor = UIColor(white: 0, alpha: 0.6)
                 
                 tool.shadow()
@@ -288,7 +279,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //is it node A?
             if let tool = nodeA as? Tool {
                 tool.light()
-                //    //is it node B?
+            //is it node B?
             } else if let tool = nodeB as? Tool {
                 tool.light()
             }
@@ -298,39 +289,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.jumpCount = 0
         }
         
-    }
-    
-    func fireflyEffect(position: CGPoint, tool: SKSpriteNode, light: SKLightNode) {
-        let particle = SKEmitterNode(fileNamed: "FireFly")!
-        particle.position = position
-        particle.zPosition = 11
-        particle.numParticlesToEmit = 55
-        
-        addChild(particle)
-        
-        let xPos = light.position.x - tool.position.x
-        let yPos = light.position.y - tool.position.y
-        let desiredAng = atan2(yPos, xPos)
-        particle.emissionAngle = desiredAng
-        
-        let delay = SKAction.waitForDuration(2)
-        let delete = SKAction.runBlock({
-            particle.removeFromParent()
-        })
-        runAction(SKAction.sequence([delay, delete]))
-        
-        
-    }
-    
-    func lightUp() {
-        let light = SKLightNode()
-        light.categoryBitMask = 2
-        light.zPosition = -10
-        light.ambientColor = UIColor.blackColor()
-        light.falloff = 1
-        light.position = CGPoint(x: 0, y: 0)
-        light.lightColor = UIColor.whiteColor()
-        player.addChild(light)
     }
     
 }

@@ -58,6 +58,28 @@ class Tool: SKSpriteNode {
         name =  "tool"
     }
     
+    func fireflyEffect(light: SKLightNode) {
+        let particle = SKEmitterNode(fileNamed: "FireFly")!
+        particle.position = CGPoint(x: 0, y: 0)
+        particle.zPosition = 11
+        particle.numParticlesToEmit = 55
+        
+        addChild(particle)
+        
+        let xPos = light.position.x - position.x
+        let yPos = light.position.y - position.y
+        let desiredAng = atan2(yPos, xPos)
+        particle.emissionAngle = desiredAng
+        
+        let delay = SKAction.waitForDuration(2)
+        let delete = SKAction.runBlock {
+            particle.removeFromParent()
+        }
+        
+        runAction(SKAction.sequence([delay, delete]))
+    }
+
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
