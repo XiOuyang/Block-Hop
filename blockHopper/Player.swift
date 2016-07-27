@@ -31,6 +31,8 @@ class Player: SKSpriteNode {
         print("left started")
         lightingBitMask = 2
         goLeft = true
+        texture = SKTexture(imageNamed: "leftRect")
+        
         
         return goLeft
     }
@@ -39,6 +41,7 @@ class Player: SKSpriteNode {
         print("right started")
         lightingBitMask = 2
         goRight = true
+        texture = SKTexture(imageNamed: "rightRect")
         
         return goRight
     }

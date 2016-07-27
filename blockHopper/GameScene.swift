@@ -52,6 +52,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var jumpLabel: SKLabelNode!
     var uiLayer: SKNode!
     var light: SKLightNode!
+    
     //initialize objects in game scene
     var circle : Tool!
     var square : Tool!
@@ -82,24 +83,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody?.dynamic = false
         
         player.lightUp()
-        
-        //generates space for the objects
-        box = SKShapeNode(rect:
-            CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height)
-            , cornerRadius: 30)
-        box.position = CGPoint(x: 0, y: ground.size.height)
-        box.zPosition = 1
-        box.fillColor = UIColor.whiteColor()
-        box.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height))
-        box.physicsBody?.collisionBitMask = 2
-        addChild(box)
+        generateToolSpace()
         
         //generate circle object
-        circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 20, y: 400))
+        circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 60, y: 400))
         self.addChild(circle)
         
         //generate square object
-        square = Tool(type: Tool.ToolType.square, homePos: CGPoint(x: 20, y: 500))
+        square = Tool(type: Tool.ToolType.square, homePos: CGPoint(x: 60, y: 500))
         self.addChild(square)
         
         
@@ -115,10 +106,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         left.selectionEnded = {
             self.goLeft = false
             self.player.lightingBitMask = 0
+            self.player.texture = SKTexture(imageNamed: "stationaryRect")
         }
         right.selectionEnded = {
             self.goRight = false
             self.player.lightingBitMask = 0
+            self.player.texture = SKTexture(imageNamed: "stationaryRect")
         }
         jump.selectionEnded = {self.player.lightingBitMask = 0}
     }
@@ -132,6 +125,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     func jumpStarted() {
         player.jump()
+    }
+    
+    func generateToolSpace () {
+        //generates space for the objects
+        box = SKShapeNode(rect:
+            CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height)
+            , cornerRadius: 30)
+        box.position = CGPoint(x: 0, y: ground.size.height)
+        box.zPosition = 1
+        box.fillColor = UIColor.whiteColor()
+        box.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height))
+        box.physicsBody?.collisionBitMask = 2
+        addChild(box)
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -222,7 +228,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if player.physicsBody?.velocity.dx < -200 {
             player.physicsBody?.velocity.dx = -200
         }
-        
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
@@ -248,14 +253,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //check collision
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
             player.jumpCount = 0
+            
             //is it node A?
             if let tool = nodeA as? Tool {
-                // let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)
-                
                 tool.fireflyEffect(light)
                 light.shadowColor = UIColor(white: 0, alpha: 0.6)
                 tool.shadow()
-                //    //is it node B?
+                
+            //is it node B?
             } else if let tool = nodeB as? Tool {
                 tool.fireflyEffect(light)
                 light.shadowColor = UIColor(white: 0, alpha: 0.6)
@@ -288,8 +293,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if nodeA.name == "player" && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
             player.jumpCount = 0
         }
-        
     }
-    
 }
 
+// let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)

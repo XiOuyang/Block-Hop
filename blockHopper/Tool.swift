@@ -18,11 +18,7 @@ class Tool: SKSpriteNode {
     }
     //holds enum type
     var type : ToolType!
-    
     var homePos : CGPoint!
-    
-    
-    
     
     //init to inherit properties from gamescene
     init(type: ToolType, homePos: CGPoint!) {
