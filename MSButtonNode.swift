@@ -20,7 +20,7 @@ class MSButtonNode: SKSpriteNode {
         print("No button selection began action set")
     }
     var selectionEnded: () -> Void = {
-        print("No button selectio ended action set")
+        print("No button selection ended action set")
     }
 
     /* Button state management */
@@ -33,6 +33,7 @@ class MSButtonNode: SKSpriteNode {
                 
                 /* Visible */
                 self.alpha = 1
+                self.hidden = false
                 break
             case .Selected:
                 /* Semi transparent */
@@ -44,6 +45,7 @@ class MSButtonNode: SKSpriteNode {
                 
                 /* Hide */
                 self.alpha = 0
+                self.hidden = true
                 break
             }
         }

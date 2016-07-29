@@ -20,25 +20,23 @@ class Player: SKSpriteNode {
     func jump() {
         if jumpCount < 1 {
             jumpAnimation()
-            print("jump started")
+//            print("jump started")
             lightingBitMask = 2
-            physicsBody?.applyImpulse(CGVectorMake(0, 600))
+            physicsBody?.applyImpulse(CGVectorMake(0, 700))
             jumpCount += 1
         }
     }
     
     func moveLeft() -> Bool {
-        print("left started")
         lightingBitMask = 2
         goLeft = true
         texture = SKTexture(imageNamed: "leftRect")
-        
-        
+
         return goLeft
     }
     
     func moveRight() -> Bool {
-        print("right started")
+//        print("right started")
         lightingBitMask = 2
         goRight = true
         texture = SKTexture(imageNamed: "rightRect")

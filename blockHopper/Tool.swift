@@ -31,12 +31,12 @@ class Tool: SKSpriteNode {
         //generates square
         case .square:
             texture = SKTexture(imageNamed: "square")
-            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 80, height: 80))
+            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 70, height: 70))
             break
         //generates circle
         case .circle:
             texture = SKTexture(imageNamed: "circle")
-            super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 80, height: 80))
+            super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 70, height: 70))
             break
         case .triangle:
             super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 80, height: 80))
@@ -48,7 +48,7 @@ class Tool: SKSpriteNode {
         //sets properties of tools
         zPosition = 2
         physicsBody = SKPhysicsBody(texture: texture, size: frame.size)
-        physicsBody?.collisionBitMask = 1
+        physicsBody?.categoryBitMask = 1
         physicsBody?.affectedByGravity = false
         physicsBody?.allowsRotation = false
         name =  "tool"
@@ -74,7 +74,39 @@ class Tool: SKSpriteNode {
         
         runAction(SKAction.sequence([delay, delete]))
     }
-
+    
+    func bounce(player: SKSpriteNode, circle: Tool) {
+        let toolMid = circle.position.x
+        let playerBottom = player.position.y - (player.frame.size.height/2)
+        let toolTop = (circle.position.y + circle.frame.size.height/2 - 2)
+        
+        let scaleDown = SKAction.scaleTo(0.8, duration: 0.1)
+        scaleDown.timingMode = SKActionTimingMode.EaseInEaseOut
+        let scaleUp = SKAction.scaleTo(1, duration: 0.1)
+        scaleUp.timingMode = SKActionTimingMode.EaseInEaseOut
+        runAction(SKAction.sequence([scaleDown, scaleUp]))
+        
+        if playerBottom > toolTop {
+            player.physicsBody?.applyImpulse(CGVectorMake(0, 100))
+        } else {
+            if player.position.x > toolMid {
+                player.physicsBody?.applyImpulse(CGVectorMake(100, 0))
+            } else if player.position.x < toolMid {
+                player.physicsBody?.applyImpulse(CGVectorMake(-100, 0))
+            } else if player.position.x == toolMid {
+                player.physicsBody?.applyImpulse(CGVectorMake(0, -100))
+            }
+        }
+    }
+    
+    func delayGravity(tool: Tool) {
+       runAction(SKAction.sequence([SKAction.waitForDuration(0.5),
+        SKAction.runBlock({
+            tool.physicsBody?.dynamic = true
+            tool.physicsBody?.affectedByGravity = true
+        })]))
+    
+    }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

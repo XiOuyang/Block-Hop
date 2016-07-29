@@ -12,11 +12,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //enum to keep track of game state
     enum GameState {
-        case Setup, Play
+        case Setup, Play, Gameover
     }
     
     //holds game state enum type
-    var currState: GameState = .Setup{
+    var currState: GameState = .Setup {
+        /* if currState is set to be these types: */
         didSet {
             switch currState {
             case .Setup:
@@ -27,9 +28,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 self.player.physicsBody?.dynamic = false
                 break
             case .Play:
+                /* allows movement for player */
                 self.player.physicsBody?.dynamic = true
-                
                 break
+                
+            case .Gameover:
+                player.physicsBody?.dynamic = false
+                left.userInteractionEnabled = false
+                right.userInteractionEnabled = false
+                jump.userInteractionEnabled = false
             }
         }
     }
@@ -38,15 +45,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var goLeft: Bool = false
     var goRight: Bool = false
     
-    //keeps track of jump counter
-    
     //scene props
     var player: Player!
-    var goal: SKSpriteNode!
+    var goal: SKEmitterNode!
     var ground: SKSpriteNode!
     var left: MSButtonNode!
     var right: MSButtonNode!
     var jump: MSButtonNode!
+    var restart: MSButtonNode!
     var leftLabel: SKLabelNode!
     var rightLabel: SKLabelNode!
     var jumpLabel: SKLabelNode!
@@ -61,16 +67,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        view.showsPhysics = true
+        //        view.showsPhysics = true
         
         //sets up connections with scene props
         uiLayer = self.childNodeWithName("hudLayer")!
         player = self.childNodeWithName("player") as! Player
-        goal = self.childNodeWithName("goal") as! SKSpriteNode
         ground = self.childNodeWithName(Constants.ground) as! SKSpriteNode
         left = uiLayer.childNodeWithName("left") as! MSButtonNode
         right = uiLayer.childNodeWithName("right") as! MSButtonNode
         jump = uiLayer.childNodeWithName("jump") as! MSButtonNode
+        restart = self.childNodeWithName("restartButton") as! MSButtonNode
         leftLabel = left.childNodeWithName("leftLabel") as! SKLabelNode
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
@@ -82,8 +88,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.dynamic = false
         
+        restart.state = .Hidden
+        
+        restart.selectionBegan = {
+            /* Grab reference to our SpriteKit view */
+            let skView = self.view as SKView!
+            
+            /* Load Game scene */
+            let scene = GameScene(fileNamed:"GameScene") as GameScene!
+            
+            /* Ensure correct aspect mode */
+            scene.scaleMode = .AspectFill
+            
+            /* Restart game scene */
+            skView.presentScene(scene)
+        }
+        
+        
+        //adds light to middle of player block
         player.lightUp()
+        
+        //generates space for tools to be in
         generateToolSpace()
+        
+        //generates the goal object
+        generateGoal()
         
         //generate circle object
         circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 60, y: 400))
@@ -102,7 +131,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         right.selectionBegan = rightStarted
         jump.selectionBegan = jumpStarted
         
-        //when not clicking, the functions end
+        //when not clicking, the movement functions end
         left.selectionEnded = {
             self.goLeft = false
             self.player.lightingBitMask = 0
@@ -118,10 +147,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //move functions
     func leftStarted() {
-       goLeft = player.moveLeft()
+        goLeft = player.moveLeft()
     }
     func rightStarted() {
-       goRight = player.moveRight()
+        goRight = player.moveRight()
     }
     func jumpStarted() {
         player.jump()
@@ -135,15 +164,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         box.position = CGPoint(x: 0, y: ground.size.height)
         box.zPosition = 1
         box.fillColor = UIColor.whiteColor()
-        box.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height))
+        box.physicsBody = SKPhysicsBody(edgeLoopFromRect:
+            CGRect(x: 0, y: 0, width: 120, height:
+                frame.size.height - ground.size.height))
         box.physicsBody?.collisionBitMask = 2
         addChild(box)
     }
     
+    func generateGoal() {
+        goal = SKEmitterNode(fileNamed: "goal")
+        goal.position = CGPoint(x: 1050, y: 500)
+        goal.physicsBody = SKPhysicsBody(circleOfRadius: 20)
+        goal.physicsBody?.affectedByGravity = false
+        goal.physicsBody?.dynamic = false
+        addChild(goal)
+    }
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
+        if currState == .Gameover { return }
+        
         /* Called when a touch begins */
-        print("gamescene touches began")
+        //        print("gamescene touches began")
         
         //for all your touches on screen
         for touch in touches {
@@ -162,11 +204,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //object you are dragging is the tool
                 dragObject = tool
                 tool.physicsBody?.collisionBitMask = 0
+                tool.physicsBody?.dynamic = true
+                tool.physicsBody?.affectedByGravity = false
             }
         }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        if currState == .Gameover { return }
         
         for touch in touches {
             let location = touch.locationInNode(self)
@@ -179,12 +225,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        if currState == .Gameover { return }
+        
         //if you're dragging the tool
         if let tool = dragObject {
             
             //looping through all children of the scene
             for node in self.children {
-                if node == tool {
+                if node == tool || node == restart {
                     continue
                 }
                 // sets up intersection check
@@ -194,8 +243,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if  intersect {
                     tool.position = tool.homePos
                     tool.physicsBody?.collisionBitMask = 1
+                    tool.physicsBody?.affectedByGravity = false
+                    tool.physicsBody?.dynamic = false
+                    
                     break
                 }
+                tool.physicsBody?.collisionBitMask = 1
+                tool.physicsBody?.dynamic = false
             }
         }
         //change game state
@@ -208,6 +262,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func update(currentTime: CFTimeInterval) {
         
+        if currState == .Gameover { return }
+        
         /* Called before each frame is rendered */
         
         //if buttons clicked, apply force corresponding to desired direction
@@ -218,8 +274,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // caps jumping height
-        if player.physicsBody?.velocity.dy > 530 {
-            player.physicsBody?.velocity.dy = 530
+        if player.physicsBody?.velocity.dy > 575 {
+            player.physicsBody?.velocity.dy = 575
         }
         
         //caps speed
@@ -232,6 +288,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func didBeginContact(contact: SKPhysicsContact) {
         
+        if currState == .Gameover { return }
+        
         /* Get references to bodies involved in collision */
         let contactA:SKPhysicsBody = contact.bodyA
         let contactB:SKPhysicsBody = contact.bodyB
@@ -243,34 +301,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //if player is touching goal, cannot jump
         if nodeA.name == Constants.player && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
             print("hit goal")
+            restart.state = .Active
+            currState = .Gameover
             
-            player.jumpCount = 2
         }
+        
         
         if nodeA.name == "player" && nodeB.name == Constants.ground || nodeA.name == "ground" && nodeB.name == "player" {
             player.jumpCount = 0
         }
         //check collision
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
-            player.jumpCount = 0
+            
+            if nodeA == circle || nodeB == circle {
+                circle.bounce(player, circle: circle)
+            }
             
             //is it node A?
             if let tool = nodeA as? Tool {
-                tool.fireflyEffect(light)
-                light.shadowColor = UIColor(white: 0, alpha: 0.6)
-                tool.shadow()
+                if nodeA == square {
+                    //apply firefly particle effect on tool
+                    tool.fireflyEffect(light)
+                    //sets shade of the shadow from tool
+                    light.shadowColor = UIColor(white: 0, alpha: 0.6)
+                    //apply shadow effect
+                    tool.shadow()
+                }
+                print(player.position.y - (player.frame.size.height/2))
+                print(tool.position.y + (tool.frame.size.height/2) - 1)
                 
-            //is it node B?
+                if player.position.y - (player.frame.size.height/2) > tool.position.y + (tool.frame.size.height/2) - 3 {
+                    tool.delayGravity(tool)
+                    player.jumpCount = 0
+                }
+                //is it node B?
             } else if let tool = nodeB as? Tool {
-                tool.fireflyEffect(light)
-                light.shadowColor = UIColor(white: 0, alpha: 0.6)
+                if nodeB == square {
+                    tool.fireflyEffect(light)
+                    light.shadowColor = UIColor(white: 0, alpha: 0.6)
+                    tool.shadow()
+                }
+                print(player.position.y - (player.frame.size.height/2))
+                print(tool.position.y + (tool.frame.size.height/2) - 1)
                 
-                tool.shadow()
+                if player.position.y - (player.frame.size.height/2) > tool.position.y + (tool.frame.size.height/2) - 3 {
+                    tool.delayGravity(tool)
+                    player.jumpCount = 0
+                }
             }
         }
     }
     
     func didEndContact(contact: SKPhysicsContact) {
+        
+        if currState == .Gameover { return }
         
         let contactA:SKPhysicsBody = contact.bodyA
         let contactB:SKPhysicsBody = contact.bodyB
@@ -280,11 +364,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let nodeB = contactB.node!
         
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
-            
             //is it node A?
             if let tool = nodeA as? Tool {
                 tool.light()
-            //is it node B?
+                //is it node B?
             } else if let tool = nodeB as? Tool {
                 tool.light()
             }
