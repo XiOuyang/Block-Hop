@@ -52,7 +52,7 @@ class Player: SKSpriteNode {
         runAction(SKAction.sequence([scaleDown, scaleUp]))
     }
     
-    func lightUp() {
+    func createLight() {
         let light = SKLightNode()
         light.categoryBitMask = 2
         light.zPosition = -10

@@ -58,6 +58,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var jumpLabel: SKLabelNode!
     var uiLayer: SKNode!
     var light: SKLightNode!
+    var tutorialLevel: SKReferenceNode!
     
     //initialize objects in game scene
     var circle : Tool!
@@ -69,10 +70,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Setup your scene here */
         //        view.showsPhysics = true
         
+       // var tutorialLevel = SKReferenceNode(fileNamed: "Tutorial.sks")!
+       // addChild(tutorialLevel)
+        
+        let path = NSBundle.mainBundle().pathForResource("Tutorial", ofType: "sks")
+        tutorialLevel = SKReferenceNode (URL: NSURL (fileURLWithPath: path!))
+        addChild(tutorialLevel)
+        
+        //how to add a sks file into a scene
+        
         //sets up connections with scene props
         uiLayer = self.childNodeWithName("hudLayer")!
-        player = self.childNodeWithName("player") as! Player
-        ground = self.childNodeWithName(Constants.ground) as! SKSpriteNode
+        player = self.tutorialLevel.childNodeWithName("//player") as! Player
+        ground = self.tutorialLevel.childNodeWithName("//" + Constants.ground) as! SKSpriteNode
         left = uiLayer.childNodeWithName("left") as! MSButtonNode
         right = uiLayer.childNodeWithName("right") as! MSButtonNode
         jump = uiLayer.childNodeWithName("jump") as! MSButtonNode
@@ -80,7 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         leftLabel = left.childNodeWithName("leftLabel") as! SKLabelNode
         rightLabel = right.childNodeWithName("rightLabel") as! SKLabelNode
         jumpLabel = jump.childNodeWithName("jumpLabel") as! SKLabelNode
-        light = self.childNodeWithName("light") as! SKLightNode
+        light = tutorialLevel.childNodeWithName("//light") as! SKLightNode
         
         //sets up boundary so you can't go off-screen
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
@@ -104,9 +114,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             skView.presentScene(scene)
         }
         
-        
         //adds light to middle of player block
-        player.lightUp()
+        player.createLight()
         
         //generates space for tools to be in
         generateToolSpace()
@@ -116,11 +125,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //generate circle object
         circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 60, y: 400))
-        self.addChild(circle)
+        self.tutorialLevel.addChild(circle)
         
         //generate square object
         square = Tool(type: Tool.ToolType.square, homePos: CGPoint(x: 60, y: 500))
-        self.addChild(square)
+        self.tutorialLevel.addChild(square)
         
         
         /* Set physics contact delegate */
@@ -168,16 +177,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             CGRect(x: 0, y: 0, width: 120, height:
                 frame.size.height - ground.size.height))
         box.physicsBody?.collisionBitMask = 2
-        addChild(box)
+        self.tutorialLevel.addChild(box)
     }
     
     func generateGoal() {
         goal = SKEmitterNode(fileNamed: "goal")
-        goal.position = CGPoint(x: 1050, y: 500)
+        goal.position = CGPoint(x: 1050, y: 220)
         goal.physicsBody = SKPhysicsBody(circleOfRadius: 20)
         goal.physicsBody?.affectedByGravity = false
         goal.physicsBody?.dynamic = false
-        addChild(goal)
+        self.tutorialLevel.addChild(goal)
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -232,7 +241,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if let tool = dragObject {
             
             //looping through all children of the scene
-            for node in self.children {
+            for node in self.tutorialLevel.children {
                 if node == tool || node == restart {
                     continue
                 }
@@ -274,8 +283,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         // caps jumping height
-        if player.physicsBody?.velocity.dy > 575 {
-            player.physicsBody?.velocity.dy = 575
+        if player.physicsBody?.velocity.dy > 600 {
+            player.physicsBody?.velocity.dy = 600
         }
         
         //caps speed
@@ -303,7 +312,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print("hit goal")
             restart.state = .Active
             currState = .Gameover
-            
         }
         
         
