@@ -26,8 +26,7 @@ class TitlePage: SKScene {
             let skView = self.view as SKView!
             
             /* Load Game scene */
-            let scene = Tutorial(fileNamed:"Tutorial") as Tutorial!
-            
+            let scene = GameScene(fileNamed:"GameScene") as GameScene!
             /* Ensure correct aspect mode */
             scene.scaleMode = .AspectFill
             
