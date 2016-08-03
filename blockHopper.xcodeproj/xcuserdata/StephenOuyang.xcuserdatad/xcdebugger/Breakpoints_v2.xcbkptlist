@@ -25,70 +25,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "blockHopper/GameScene.swift"
-            timestampString = "491783077.089449"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
-            landmarkName = "touchesBegan(_:withEvent:)"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "blockHopper.GameScene.touchesBegan (Swift.Set&lt;__ObjC.UITouch&gt;, withEvent : Swift.Optional&lt;__ObjC.UIEvent&gt;) -&gt; ()"
-                  moduleName = "blockHopper"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/StephenOuyang/Desktop/MakeSchool/blockHopper/blockHopper/GameScene.swift"
-                  timestampString = "491429403.828146"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "189"
-                  endingLineNumber = "189"
-                  offsetFromSymbolStart = "396">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "blockHopper.GameScene.touchesBegan (Swift.Set&lt;__ObjC.UITouch&gt;, withEvent : Swift.Optional&lt;__ObjC.UIEvent&gt;) -&gt; ()"
-                  moduleName = "blockHopper"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/StephenOuyang/Desktop/MakeSchool/blockHopper/blockHopper/GameScene.swift"
-                  timestampString = "491429403.828512"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "189"
-                  endingLineNumber = "189"
-                  offsetFromSymbolStart = "504">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "blockHopper/GameScene.swift"
-            timestampString = "491783077.089449"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "279"
-            endingLineNumber = "279"
-            landmarkName = "touchesEnded(_:withEvent:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "blockHopper/Tool.swift"
             timestampString = "491504871.223822"
             startingColumnNumber = "9223372036854775807"
@@ -102,17 +38,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "blockHopper/GameScene.swift"
-            timestampString = "491783077.089449"
+            filePath = "MSButtonNode.swift"
+            timestampString = "491957075.315115"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
-            landmarkName = "touchesEnded(_:withEvent:)"
-            landmarkType = "5">
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "MSButtonNode"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -121,14 +57,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "blockHopper/GameScene.swift"
-            timestampString = "491783077.089449"
+            filePath = "MSButtonNode.swift"
+            timestampString = "491957452.764341"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
-            landmarkName = "touchesEnded(_:withEvent:)"
-            landmarkType = "5">
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "MSButtonNode"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

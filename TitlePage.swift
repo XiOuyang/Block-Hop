@@ -31,7 +31,7 @@ class TitlePage: SKScene {
             scene.scaleMode = .AspectFill
             
             /* Show debug */
-            skView.showsPhysics = true
+            //skView.showsPhysics = true
             skView.showsDrawCount = true
             skView.showsFPS = true
             
