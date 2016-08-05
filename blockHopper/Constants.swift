@@ -18,9 +18,6 @@ struct Constants {
     static let rightButton = "right"
     static let jumpButton = "jump"
     static let restartButton = "restartButton"
-    static let leftLabel = "leftLabel"
-    static let rightLabel = "rightLabel"
-    static let jumpLabel = "jumpLabel"
     static let hudLayer = "hudLayer"
     
     //colors

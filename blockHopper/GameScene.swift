@@ -21,8 +21,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         didSet {
             switch currState {
             case .Setup:
-                //return player to start position
-                self.player.position = CGPoint(x: 200, y: 240)
                 //can't move player
                 self.player.physicsBody?.dynamic = false
                 break
@@ -45,19 +43,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //scene props
     var player: Player!
-    var goal: SKEmitterNode!
+    var goal: SKSpriteNode!
     var ground: SKSpriteNode!
     var left: MSButtonNode!
     var right: MSButtonNode!
     var jump: MSButtonNode!
     var restart: MSButtonNode!
-    var leftLabel: SKLabelNode!
-    var rightLabel: SKLabelNode!
-    var jumpLabel: SKLabelNode!
     var uiLayer: SKNode!
-    var light: SKLightNode!
     var level: SKNode!
-    var fire: SKEmitterNode!
+    var winLabel: SKLabelNode!
     var currentLevel = 0
     
     
@@ -70,7 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-                view.showsPhysics = true
+        view.showsPhysics = false
         
         var path:String!
         switch currentLevel {
@@ -80,14 +74,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case 1:
             path = NSBundle.mainBundle().pathForResource("level1", ofType: "sks")!
             break
-        case 2:
-            path = NSBundle.mainBundle().pathForResource("level2", ofType: "sks")
+            //        case 2:
+        //            path = NSBundle.mainBundle().pathForResource("level2", ofType: "sks")
         default:
             print("blah")
         }
         
         level = SKReferenceNode (URL: NSURL (fileURLWithPath: path)).children[0]
-        level.name = "LEVEL"
         addChild(level)
         
         //how to add a sks file into a scene
@@ -100,10 +93,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         right = uiLayer.childNodeWithName(Constants.rightButton) as! MSButtonNode
         jump = uiLayer.childNodeWithName(Constants.jumpButton) as! MSButtonNode
         restart = self.childNodeWithName(Constants.restartButton) as! MSButtonNode
-        leftLabel = left.childNodeWithName(Constants.leftLabel) as! SKLabelNode
-        rightLabel = right.childNodeWithName(Constants.rightLabel) as! SKLabelNode
-        jumpLabel = jump.childNodeWithName(Constants.jumpLabel) as! SKLabelNode
-        light = level.childNodeWithName("//Light") as! SKLightNode
+        goal = level.childNodeWithName("//goal") as! SKSpriteNode
+        winLabel = level.childNodeWithName("//winLabel") as! SKLabelNode
         
         //sets up boundary so you can't go off-screen
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
@@ -112,6 +103,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody?.dynamic = false
         
         restart.state = .Hidden
+        
+        winLabel.userInteractionEnabled = false
+        winLabel.alpha = 0
         
         restart.selectionBegan = {
             /* Grab reference to our SpriteKit view */
@@ -132,9 +126,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //generates space for tools to be in
         generateToolSpace()
-        
-        //generates the goal object
-        generateGoal()
         
         //generate circle object
         circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 60, y: 400))
@@ -166,13 +157,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         jump.selectionEnded = {self.player.lightingBitMask = 0}
         
-        if currentLevel == 2 {
+        if currentLevel == 1 {
             burnBabyBurn(CGPoint(x: 490, y: 205),
                          size: CGRect(x: -115, y: -18, width: 230, height: 40),
-                         fire: SKEmitterNode(fileNamed: "fire2")!)
+                         fire: SKEmitterNode(fileNamed: "fire")!,
+                         length: CGVector(dx: 270, dy: 5))
             burnBabyBurn(CGPoint(x: 860, y: 205),
                          size: CGRect(x: -135, y: -18, width: 268, height: 40),
-                         fire: SKEmitterNode(fileNamed: "fire")!)
+                         fire: SKEmitterNode(fileNamed: "fire")!,
+                         length: CGVector(dx: 305, dy: 5))
         }
     }
     
@@ -202,34 +195,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         level.addChild(box)
     }
     
-    func generateGoal() {
-        goal = SKEmitterNode(fileNamed: "goal")
-        
-        let currentGoal = currentLevel
-        print(currentGoal)
-        
-        switch currentGoal {
-        case 0:
-            goal.position = CGPoint(x: 1050, y: 220)
-            break
-        case 1:
-            goal.position = CGPoint(x: 1050, y: 500)
-            break
-        case 2:
-            goal.position = CGPoint(x: 1050, y: 500)
-            break
-            
-        default:
-            print("blah")
-        }
-        
-        goal.physicsBody = SKPhysicsBody(circleOfRadius: 20)
-        goal.physicsBody?.affectedByGravity = false
-        goal.physicsBody?.dynamic = false
-        level.addChild(goal)
-    }
     
-    func burnBabyBurn(position : CGPoint, size: CGRect, fire: SKEmitterNode) {
+    func burnBabyBurn(position : CGPoint, size: CGRect, fire: SKEmitterNode, length: CGVector) {
         let fire: SKEmitterNode = fire
         fire.zPosition = 1
         fire.position = position
@@ -238,6 +205,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         fire.physicsBody?.affectedByGravity = false
         fire.physicsBody?.dynamic = false
         fire.physicsBody?.categoryBitMask = 1
+        fire.particlePositionRange = length
         level.addChild(fire)
     }
     
@@ -264,9 +232,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 currState = .Setup
                 //object you are dragging is the tool
                 dragObject = tool
+                tool.toolAnimationStart()
                 tool.physicsBody?.collisionBitMask = 0
                 tool.physicsBody?.dynamic = true
                 tool.physicsBody?.affectedByGravity = false
+                
             }
         }
     }
@@ -280,6 +250,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //if you touched a tool
             if let tool = dragObject {
                 //tool moves to where you drag
+                tool.toolAnimationStart()
                 tool.position = location
             }
         }
@@ -294,9 +265,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             //looping through all children of the scene
             for node in level.children {
-                if node == tool || node == restart {
+                if node == tool || node == restart || node.name == "groundRect"
+                    || node.name == "flames" || node.name == "background"
+                    || node.name == "hill" || node.name == "volcano" {
                     continue
                 }
+                
                 // sets up intersection check
                 let intersect : Bool = tool.intersectsNode(node)
                 
@@ -310,6 +284,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     
                     break
                 }
+                tool.toolAnimationEnd()
                 tool.physicsBody?.collisionBitMask = 1
                 tool.physicsBody?.dynamic = false
             }
@@ -332,8 +307,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if goRight {
             player.physicsBody?.applyForce(CGVector(dx: 200, dy: 0))
         } else if goLeft {
-           // player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
-            player.physicsBody?.velocity.dx = -150
+            player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
+            
         }
         
         // caps jumping height
@@ -364,42 +339,52 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //if player is touching goal, cannot jump
         if nodeA.name == Constants.player && nodeB.name == Constants.goal || nodeA.name == Constants.goal
             && nodeB.name == Constants.player {
+            
+            if currentLevel == 1 {
+                
+                winLabel.alpha = 1
+                restart.state = .Active
+                currState = .Gameover
+
+            }
             print("hit goal")
             currentLevel += 1
             print(currentLevel)
             
-            /* Grab reference to our SpriteKit view */
-            let skView = self.view as SKView!
-            
-            /* Load Game scene */
-            let scene = GameScene(fileNamed:"GameScene") as GameScene!
-//            let scene = GameScene() as GameScene!
-            
-            scene.currentLevel = currentLevel
-            
-            /* Ensure correct aspect mode */
-            scene.scaleMode = .AspectFill
-            
-            /* Show debug */
-            //skView.showsPhysics = true
-            skView.showsDrawCount = true
-            skView.showsFPS = true
-            
-            /* Start game scene */
-            skView.presentScene(scene)
+            if currentLevel == 1 {
+                /* Grab reference to our SpriteKit view */
+                let skView = self.view as SKView!
+                
+                /* Load Game scene */
+                let scene = GameScene(fileNamed:"GameScene") as GameScene!
+                
+                scene.currentLevel = currentLevel
+                
+                /* Ensure correct aspect mode */
+                scene.scaleMode = .AspectFill
+                
+                /* Show debug */
+                //skView.showsPhysics = true
+                skView.showsDrawCount = true
+                skView.showsFPS = true
+                
+                /* Start game scene */
+                skView.presentScene(scene)
+            }
             
             //restart.state = .Active
             //currState = .Gameover
         }
         
-        
-        if nodeA.name == Constants.player && nodeB.name == Constants.ground || nodeA.name == Constants.ground
-            && nodeB.name == Constants.player {
+        if nodeA.name == Constants.player && nodeB.name == Constants.ground
+            || nodeA.name == Constants.ground && nodeB.name == Constants.player {
             player.jumpCount = 0
             print(player.position)
         }
+        
         //check collision
-        if nodeA.name == Constants.player && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == Constants.player {
+        if nodeA.name == Constants.player && nodeB.name == "tool"
+            || nodeA.name == "tool" && nodeB.name == Constants.player {
             
             if nodeA == circle || nodeB == circle {
                 circle.bounce(player, circle: circle)
@@ -407,40 +392,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             //is it node A?
             if let tool = nodeA as? Tool {
-                if nodeA == square {
-                    //apply firefly particle effect on tool
-                    tool.fireflyEffect(light)
-                    //sets shade of the shadow from tool
-                    light.shadowColor = UIColor(white: 0, alpha: 0.6)
-                    //apply shadow effect
-                    tool.shadow()
-                }
-//                print(player.position.y - (player.frame.size.height/2))
-//                print(tool.position.y + (tool.frame.size.height/2) - 1)
-                
                 if player.position.y - (player.frame.size.height/2) > tool.position.y + (tool.frame.size.height/2) - 3 {
-                    tool.delayGravity(tool)
                     player.jumpCount = 0
                 }
+            }
                 //is it node B?
-            } else if let tool = nodeB as? Tool {
-                if nodeB == square {
-                    tool.fireflyEffect(light)
-                    light.shadowColor = UIColor(white: 0, alpha: 0.6)
-                    tool.shadow()
-                }
-                print(player.position.y - (player.frame.size.height/2))
-                print(tool.position.y + (tool.frame.size.height/2) - 1)
+            else if let tool = nodeB as? Tool {
                 
-                if player.position.y - (player.frame.size.height/2) > tool.position.y + (tool.frame.size.height/2) - 3 {
-                    tool.delayGravity(tool)
+                if player.position.y - (player.frame.size.height/2)
+                    > tool.position.y + (tool.frame.size.height/2) - 3 {
+                    
                     player.jumpCount = 0
                 }
             }
         }
         
-        if (nodeA.name == "flames" && nodeB.name == "player") || (nodeA.name == "player" && nodeB.name == "flames")
-            || (nodeA.name == "flames2" && nodeB.name == "player") || (nodeA.name == "player" && nodeB.name == "flames2") {
+        if (nodeA.name == "flames" && nodeB.name == "player")
+            || (nodeA.name == "player" && nodeB.name == "flames") {
+            
             print("game over")
             restart.state = .Active
             currState = .Gameover
@@ -459,19 +428,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let nodeB = contactB.node!
         
         if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
+            
             //is it node A?
             if let tool = nodeA as? Tool {
                 tool.light()
+                
                 //is it node B?
             } else if let tool = nodeB as? Tool {
                 tool.light()
             }
         }
-        
-        if nodeA.name == "player" && nodeB.name == "goal" || nodeA.name == "goal" && nodeB.name == "player" {
-            player.jumpCount = 0
-        }
     }
 }
 
-// let c = UIColor(red: 222/255, green: 187/255, blue: 12/255, alpha: 1)
+

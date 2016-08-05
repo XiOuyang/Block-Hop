@@ -45,9 +45,9 @@ class Player: SKSpriteNode {
     }
     
     func jumpAnimation() {
-        let scaleDown = SKAction.scaleTo(0.8, duration: 0.5)
+        let scaleDown = SKAction.scaleTo(0.7, duration: 0.5)
         scaleDown.timingMode = SKActionTimingMode.EaseInEaseOut
-        let scaleUp = SKAction.scaleTo(1.2, duration: 0.5)
+        let scaleUp = SKAction.scaleTo(1, duration: 0.5)
         scaleUp.timingMode = SKActionTimingMode.EaseInEaseOut
         runAction(SKAction.sequence([scaleDown, scaleUp]))
     }

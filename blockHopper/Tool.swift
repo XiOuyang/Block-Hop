@@ -30,18 +30,19 @@ class Tool: SKSpriteNode {
         switch type {
         //generates square
         case .square:
-            texture = SKTexture(imageNamed: "square")
-            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 70, height: 70))
+            texture = SKTexture(imageNamed: "grassGround")
+            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 70, height: 50))
             break
         //generates circle
         case .circle:
-            texture = SKTexture(imageNamed: "circle")
-            super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 70, height: 70))
+            texture = SKTexture(imageNamed: "cloud3")
+            super.init(texture: texture, color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
             break
         case .triangle:
             super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 80, height: 80))
             print("todo create triangle...")
         }
+        
         self.position = homePos
         colorBlendFactor = 0.5
         
@@ -54,26 +55,26 @@ class Tool: SKSpriteNode {
         name =  "tool"
     }
     
-    func fireflyEffect(light: SKLightNode) {
-        let particle = SKEmitterNode(fileNamed: "FireFly")!
-        particle.position = CGPoint(x: 0, y: 0)
-        particle.zPosition = 11
-        particle.numParticlesToEmit = 55
-        
-        addChild(particle)
-        
-        let xPos = light.position.x - position.x
-        let yPos = light.position.y - position.y
-        let desiredAng = atan2(yPos, xPos)
-        particle.emissionAngle = desiredAng
-        
-        let delay = SKAction.waitForDuration(2)
-        let delete = SKAction.runBlock {
-            particle.removeFromParent()
-        }
-        
-        runAction(SKAction.sequence([delay, delete]))
-    }
+//    func fireflyEffect(light: SKLightNode) {
+//        let particle = SKEmitterNode(fileNamed: "FireFly")!
+//        particle.position = CGPoint(x: 0, y: 0)
+//        particle.zPosition = 11
+//        particle.numParticlesToEmit = 55
+//        
+//        addChild(particle)
+//        
+//        let xPos = light.position.x - position.x
+//        let yPos = light.position.y - position.y
+//        let desiredAng = atan2(yPos, xPos)
+//        particle.emissionAngle = desiredAng
+//        
+//        let delay = SKAction.waitForDuration(2)
+//        let delete = SKAction.runBlock {
+//            particle.removeFromParent()
+//        }
+//        
+//        runAction(SKAction.sequence([delay, delete]))
+//    }
     
     func bounce(player: SKSpriteNode, circle: Tool) {
         let toolMid = circle.position.x
@@ -99,13 +100,12 @@ class Tool: SKSpriteNode {
         }
     }
     
-    func delayGravity(tool: Tool) {
-       runAction(SKAction.sequence([SKAction.waitForDuration(0.5),
-        SKAction.runBlock({
-            tool.physicsBody?.dynamic = true
-            tool.physicsBody?.affectedByGravity = true
-        })]))
-    
+        
+    func toolAnimationStart() {
+        runAction(SKAction.scaleTo(1.5, duration: 0.4))
+    }
+    func toolAnimationEnd() {
+        runAction(SKAction.scaleTo(1, duration: 0.4))
     }
     
     required init?(coder aDecoder: NSCoder) {
