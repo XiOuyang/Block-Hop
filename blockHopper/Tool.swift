@@ -14,11 +14,12 @@ class Tool: SKSpriteNode {
     
     // types of tools
     enum ToolType {
-        case square, triangle, circle
+        case platform1, platform2, platform3
     }
     //holds enum type
     var type : ToolType!
     var homePos : CGPoint!
+    var currentLevel = 0
     
     //init to inherit properties from gamescene
     init(type: ToolType, homePos: CGPoint!) {
@@ -29,18 +30,19 @@ class Tool: SKSpriteNode {
         
         switch type {
         //generates square
-        case .square:
+        case .platform2:
             texture = SKTexture(imageNamed: "grassGround")
             super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 70, height: 50))
             break
         //generates circle
-        case .circle:
+        case .platform1:
             texture = SKTexture(imageNamed: "cloud3")
             super.init(texture: texture, color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
             break
-        case .triangle:
-            super.init(texture: texture, color: UIColor.cyanColor(), size: CGSize(width: 80, height: 80))
-            print("todo create triangle...")
+            
+        case .platform3:
+            texture = SKTexture(imageNamed: "castleGround")
+            super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 70, height: 50))
         }
         
         self.position = homePos
@@ -106,6 +108,10 @@ class Tool: SKSpriteNode {
     }
     func toolAnimationEnd() {
         runAction(SKAction.scaleTo(1, duration: 0.4))
+    }
+    
+    func addLevel() {
+        currentLevel += 1
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5D6438FA1D36D8F200376F0B"
-               BuildableName = "blockHopperTests.xctest"
+               BuildableName = "blockHopper.xctest"
                BlueprintName = "blockHopperTests"
                ReferencedContainer = "container:blockHopper.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5D6439051D36D8F200376F0B"
-               BuildableName = "blockHopperUITests.xctest"
+               BuildableName = "blockHopper.xctest"
                BlueprintName = "blockHopperUITests"
                ReferencedContainer = "container:blockHopper.xcodeproj">
             </BuildableReference>

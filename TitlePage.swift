@@ -12,12 +12,16 @@ import SpriteKit
 class TitlePage: SKScene {
     /* UI Connections */
     var startButton: MSButtonNode!
+    var settingsButton: MSButtonNode!
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
         /* Set UI connections */
         startButton = self.childNodeWithName("startButton") as! MSButtonNode
+        settingsButton = self.childNodeWithName("SettingsButton") as! MSButtonNode
+        
+        settingsButton.state = .Hidden
         
         /* Setup restart button selection handler */
         startButton.selectionBegan = {
@@ -28,12 +32,12 @@ class TitlePage: SKScene {
             /* Load Game scene */
             let scene = GameScene(fileNamed:"GameScene") as GameScene!
             /* Ensure correct aspect mode */
-            scene.scaleMode = .AspectFill
+            scene.scaleMode = .AspectFit
             
             /* Show debug */
             //skView.showsPhysics = true
-            skView.showsDrawCount = true
-            skView.showsFPS = true
+            skView.showsDrawCount = false
+            skView.showsFPS = false
             
             /* Start game scene */
             skView.presentScene(scene)

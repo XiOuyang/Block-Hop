@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D09ED321D5A7A2A0047E451 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D09ED311D5A7A2A0047E451 /* spark.png */; };
+		5D09ED341D5A7B880047E451 /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D09ED331D5A7B880047E451 /* square.png */; };
 		5D4138511D380F8E00844C1F /* MSButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D4138501D380F8E00844C1F /* MSButtonNode.swift */; };
 		5D6438E71D36D8F200376F0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6438E61D36D8F200376F0B /* AppDelegate.swift */; };
 		5D6438EB1D36D8F200376F0B /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6438EA1D36D8F200376F0B /* GameScene.swift */; };
@@ -16,12 +18,13 @@
 		5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D6438F31D36D8F200376F0B /* LaunchScreen.storyboard */; };
 		5D6439001D36D8F200376F0B /* blockHopperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6438FF1D36D8F200376F0B /* blockHopperTests.swift */; };
 		5D64390B1D36D8F200376F0B /* blockHopperUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D64390A1D36D8F200376F0B /* blockHopperUITests.swift */; };
-		5DADF99D1D414C560066346D /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DADF99C1D414C560066346D /* square.png */; };
-		5DADF99F1D414E290066346D /* circle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DADF99E1D414E290066346D /* circle.png */; };
+		5D7EB23A1D5B9FE500378B11 /* castleGround.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D7EB2391D5B9FE500378B11 /* castleGround.png */; };
+		5D98634F1D5BD12200ADE9D5 /* lv2Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D98634E1D5BD12200ADE9D5 /* lv2Background.png */; };
+		5D9863511D5BD16B00ADE9D5 /* sandGround.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D9863501D5BD16B00ADE9D5 /* sandGround.png */; };
 		5DB3F78C1D551EDF0045BFE1 /* lv1Background.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DB3F78B1D551EDF0045BFE1 /* lv1Background.png */; };
+		5DBB56801D5AA17200009793 /* castle_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DBB567F1D5AA17200009793 /* castle_grey.png */; };
 		5DD173E91D47DFE600B7E93E /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DD173E81D47DFE600B7E93E /* Player.swift */; };
 		5DDF71FE1D5109500030E76B /* level1.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DDF71FD1D5109500030E76B /* level1.sks */; };
-		5DE36CB21D53EA8900C1AF64 /* house_front_short.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE36CB11D53EA8900C1AF64 /* house_front_short.png */; };
 		5DE36CB41D53EB2A00C1AF64 /* house_beige_front.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE36CB31D53EB2A00C1AF64 /* house_beige_front.png */; };
 		5DE36CB81D53FA5500C1AF64 /* grassGround.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE36CB71D53FA5500C1AF64 /* grassGround.png */; };
 		5DE36CBA1D53FD2900C1AF64 /* cloud3.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DE36CB91D53FD2900C1AF64 /* cloud3.png */; };
@@ -39,12 +42,12 @@
 		5DF03AEB1D4834FA005417AF /* stationaryRect.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF03AEA1D4834FA005417AF /* stationaryRect.png */; };
 		5DF21AB71D541F560068FDBA /* hills2.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF21AB61D541F560068FDBA /* hills2.png */; };
 		5DF3C8071D428B7F00F8ACD9 /* FireFly.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DF3C8051D428B7F00F8ACD9 /* FireFly.sks */; };
-		5DF3C8081D428B7F00F8ACD9 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF3C8061D428B7F00F8ACD9 /* spark.png */; };
 		5DF3F9CC1D4C1CD600DCFA34 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DF3F9CB1D4C1CD600DCFA34 /* GameScene.sks */; };
 		5DF4B4CF1D4AC06700B4827C /* TitlePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4B4CE1D4AC06700B4827C /* TitlePage.swift */; };
-		5DF4B4D11D4BD77E00B4827C /* Tutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF4B4D01D4BD77E00B4827C /* Tutorial.swift */; };
 		5DF4B4D51D4BD88200B4827C /* Tutorial.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4B4D41D4BD88200B4827C /* Tutorial.sks */; };
 		5DF4B4D71D4C161E00B4827C /* level2.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5DF4B4D61D4C161D00B4827C /* level2.sks */; };
+		5DF610881D5BDB27007E7B11 /* moon_full.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF610871D5BDB27007E7B11 /* moon_full.png */; };
+		5DF6108A1D5BF08E007E7B11 /* crab.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DF610891D5BF08E007E7B11 /* crab.png */; };
 		5DF66EC61D3946D800049536 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DF66EC51D3946D800049536 /* Tool.swift */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +69,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D09ED311D5A7A2A0047E451 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
+		5D09ED331D5A7B880047E451 /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
 		5D4138501D380F8E00844C1F /* MSButtonNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MSButtonNode.swift; path = ../MSButtonNode.swift; sourceTree = "<group>"; };
 		5D6438E31D36D8F200376F0B /* blockHopper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = blockHopper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D6438E61D36D8F200376F0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -75,18 +80,19 @@
 		5D6438F11D36D8F200376F0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5D6438F41D36D8F200376F0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5D6438F61D36D8F200376F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5D6438FB1D36D8F200376F0B /* blockHopperTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockHopperTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D6438FB1D36D8F200376F0B /* blockHopper.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockHopper.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D6438FF1D36D8F200376F0B /* blockHopperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blockHopperTests.swift; sourceTree = "<group>"; };
 		5D6439011D36D8F200376F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5D6439061D36D8F200376F0B /* blockHopperUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockHopperUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D6439061D36D8F200376F0B /* blockHopper.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = blockHopper.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D64390A1D36D8F200376F0B /* blockHopperUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blockHopperUITests.swift; sourceTree = "<group>"; };
 		5D64390C1D36D8F200376F0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		5DADF99C1D414C560066346D /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
-		5DADF99E1D414E290066346D /* circle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle.png; sourceTree = "<group>"; };
+		5D7EB2391D5B9FE500378B11 /* castleGround.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = castleGround.png; sourceTree = "<group>"; };
+		5D98634E1D5BD12200ADE9D5 /* lv2Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lv2Background.png; sourceTree = "<group>"; };
+		5D9863501D5BD16B00ADE9D5 /* sandGround.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sandGround.png; sourceTree = "<group>"; };
 		5DB3F78B1D551EDF0045BFE1 /* lv1Background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lv1Background.png; sourceTree = "<group>"; };
+		5DBB567F1D5AA17200009793 /* castle_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = castle_grey.png; sourceTree = "<group>"; };
 		5DD173E81D47DFE600B7E93E /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		5DDF71FD1D5109500030E76B /* level1.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = level1.sks; sourceTree = "<group>"; };
-		5DE36CB11D53EA8900C1AF64 /* house_front_short.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = house_front_short.png; sourceTree = "<group>"; };
 		5DE36CB31D53EB2A00C1AF64 /* house_beige_front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = house_beige_front.png; sourceTree = "<group>"; };
 		5DE36CB71D53FA5500C1AF64 /* grassGround.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grassGround.png; sourceTree = "<group>"; };
 		5DE36CB91D53FD2900C1AF64 /* cloud3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cloud3.png; sourceTree = "<group>"; };
@@ -104,12 +110,12 @@
 		5DF03AEA1D4834FA005417AF /* stationaryRect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = stationaryRect.png; sourceTree = "<group>"; };
 		5DF21AB61D541F560068FDBA /* hills2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hills2.png; sourceTree = "<group>"; };
 		5DF3C8051D428B7F00F8ACD9 /* FireFly.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = FireFly.sks; sourceTree = "<group>"; };
-		5DF3C8061D428B7F00F8ACD9 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		5DF3F9CB1D4C1CD600DCFA34 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 		5DF4B4CE1D4AC06700B4827C /* TitlePage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TitlePage.swift; path = ../TitlePage.swift; sourceTree = "<group>"; };
-		5DF4B4D01D4BD77E00B4827C /* Tutorial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tutorial.swift; sourceTree = "<group>"; };
 		5DF4B4D41D4BD88200B4827C /* Tutorial.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = Tutorial.sks; path = ../Tutorial.sks; sourceTree = "<group>"; };
 		5DF4B4D61D4C161D00B4827C /* level2.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = level2.sks; sourceTree = "<group>"; };
+		5DF610871D5BDB27007E7B11 /* moon_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = moon_full.png; sourceTree = "<group>"; };
+		5DF610891D5BF08E007E7B11 /* crab.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = crab.png; sourceTree = "<group>"; };
 		5DF66EC51D3946D800049536 /* Tool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -152,8 +158,8 @@
 			isa = PBXGroup;
 			children = (
 				5D6438E31D36D8F200376F0B /* blockHopper.app */,
-				5D6438FB1D36D8F200376F0B /* blockHopperTests.xctest */,
-				5D6439061D36D8F200376F0B /* blockHopperUITests.xctest */,
+				5D6438FB1D36D8F200376F0B /* blockHopper.xctest */,
+				5D6439061D36D8F200376F0B /* blockHopper.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -170,7 +176,6 @@
 				5DF3C8051D428B7F00F8ACD9 /* FireFly.sks */,
 				5D6438E61D36D8F200376F0B /* AppDelegate.swift */,
 				5DF4B4CE1D4AC06700B4827C /* TitlePage.swift */,
-				5DF4B4D01D4BD77E00B4827C /* Tutorial.swift */,
 				5D6438EA1D36D8F200376F0B /* GameScene.swift */,
 				5DF66EC51D3946D800049536 /* Tool.swift */,
 				5DD173E81D47DFE600B7E93E /* Player.swift */,
@@ -180,24 +185,28 @@
 				5D6438EE1D36D8F200376F0B /* Main.storyboard */,
 				5D6438F11D36D8F200376F0B /* Assets.xcassets */,
 				5D6438F31D36D8F200376F0B /* LaunchScreen.storyboard */,
+				5D09ED331D5A7B880047E451 /* square.png */,
+				5D09ED311D5A7A2A0047E451 /* spark.png */,
+				5DF610891D5BF08E007E7B11 /* crab.png */,
 				5D6438F61D36D8F200376F0B /* Info.plist */,
-				5DF3C8061D428B7F00F8ACD9 /* spark.png */,
-				5DADF99E1D414E290066346D /* circle.png */,
-				5DADF99C1D414C560066346D /* square.png */,
 				5DEF3DE81D46D7DF00C89E5E /* rect.png */,
 				5DF03AE41D48340D005417AF /* rightRect.png */,
 				5DF03AE61D483427005417AF /* leftRect.png */,
 				5DF03AEA1D4834FA005417AF /* stationaryRect.png */,
-				5DE36CB11D53EA8900C1AF64 /* house_front_short.png */,
 				5DE36CB31D53EB2A00C1AF64 /* house_beige_front.png */,
+				5DBB567F1D5AA17200009793 /* castle_grey.png */,
+				5D7EB2391D5B9FE500378B11 /* castleGround.png */,
 				5DE36CB91D53FD2900C1AF64 /* cloud3.png */,
 				5DF21AB61D541F560068FDBA /* hills2.png */,
 				5DEE85C01D551BB10039A004 /* Volcano.png */,
+				5DF610871D5BDB27007E7B11 /* moon_full.png */,
+				5D9863501D5BD16B00ADE9D5 /* sandGround.png */,
 				5DE36CB71D53FA5500C1AF64 /* grassGround.png */,
 				5DEE85B61D54F1550039A004 /* buttonLeft.png */,
 				5DEE85B81D54F2020039A004 /* buttonRight.png */,
 				5DEE85BA1D54F28B0039A004 /* buttonUp.png */,
 				5DB3F78B1D551EDF0045BFE1 /* lv1Background.png */,
+				5D98634E1D5BD12200ADE9D5 /* lv2Background.png */,
 				5DEF2F961D5149BE00AECF74 /* level2.png */,
 			);
 			path = blockHopper;
@@ -256,7 +265,7 @@
 			);
 			name = blockHopperTests;
 			productName = blockHopperTests;
-			productReference = 5D6438FB1D36D8F200376F0B /* blockHopperTests.xctest */;
+			productReference = 5D6438FB1D36D8F200376F0B /* blockHopper.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		5D6439051D36D8F200376F0B /* blockHopperUITests */ = {
@@ -274,7 +283,7 @@
 			);
 			name = blockHopperUITests;
 			productName = blockHopperUITests;
-			productReference = 5D6439061D36D8F200376F0B /* blockHopperUITests.xctest */;
+			productReference = 5D6439061D36D8F200376F0B /* blockHopper.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -289,7 +298,7 @@
 				TargetAttributes = {
 					5D6438E21D36D8F200376F0B = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = R7Y8QKEC95;
+						DevelopmentTeam = QD747S5L65;
 					};
 					5D6438FA1D36D8F200376F0B = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -327,28 +336,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				5DF03AE51D48340D005417AF /* rightRect.png in Resources */,
+				5D09ED341D5A7B880047E451 /* square.png in Resources */,
 				5DE36CB41D53EB2A00C1AF64 /* house_beige_front.png in Resources */,
-				5DF3C8081D428B7F00F8ACD9 /* spark.png in Resources */,
+				5DF610881D5BDB27007E7B11 /* moon_full.png in Resources */,
 				5DEF3DE91D46D7DF00C89E5E /* rect.png in Resources */,
 				5DEE85B91D54F2020039A004 /* buttonRight.png in Resources */,
 				5DEE85C11D551BB10039A004 /* Volcano.png in Resources */,
+				5D09ED321D5A7A2A0047E451 /* spark.png in Resources */,
 				5DF4B4D71D4C161E00B4827C /* level2.sks in Resources */,
+				5DBB56801D5AA17200009793 /* castle_grey.png in Resources */,
 				5DE36CB81D53FA5500C1AF64 /* grassGround.png in Resources */,
+				5D7EB23A1D5B9FE500378B11 /* castleGround.png in Resources */,
 				5DF03AE71D483427005417AF /* leftRect.png in Resources */,
 				5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */,
 				5DF3C8071D428B7F00F8ACD9 /* FireFly.sks in Resources */,
 				5DB3F78C1D551EDF0045BFE1 /* lv1Background.png in Resources */,
 				5DDF71FE1D5109500030E76B /* level1.sks in Resources */,
 				5DF21AB71D541F560068FDBA /* hills2.png in Resources */,
-				5DE36CB21D53EA8900C1AF64 /* house_front_short.png in Resources */,
 				5DF03AEB1D4834FA005417AF /* stationaryRect.png in Resources */,
+				5DF6108A1D5BF08E007E7B11 /* crab.png in Resources */,
 				5DEE85B71D54F1550039A004 /* buttonLeft.png in Resources */,
 				5DEF3DE71D46D0C300C89E5E /* TitlePage.sks in Resources */,
+				5D98634F1D5BD12200ADE9D5 /* lv2Background.png in Resources */,
 				5D6438F21D36D8F200376F0B /* Assets.xcassets in Resources */,
-				5DADF99F1D414E290066346D /* circle.png in Resources */,
 				5DF3F9CC1D4C1CD600DCFA34 /* GameScene.sks in Resources */,
 				5DEF2F971D5149BE00AECF74 /* level2.png in Resources */,
-				5DADF99D1D414C560066346D /* square.png in Resources */,
+				5D9863511D5BD16B00ADE9D5 /* sandGround.png in Resources */,
 				5DEF2F931D513DFC00AECF74 /* fire.sks in Resources */,
 				5D6438F01D36D8F200376F0B /* Main.storyboard in Resources */,
 				5DEE85BB1D54F28B0039A004 /* buttonUp.png in Resources */,
@@ -379,7 +392,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D6438EB1D36D8F200376F0B /* GameScene.swift in Sources */,
-				5DF4B4D11D4BD77E00B4827C /* Tutorial.swift in Sources */,
 				5DF4B4CF1D4AC06700B4827C /* TitlePage.swift in Sources */,
 				5D6438ED1D36D8F200376F0B /* GameViewController.swift in Sources */,
 				5D6438E71D36D8F200376F0B /* AppDelegate.swift in Sources */,
@@ -535,9 +547,10 @@
 				INFOPLIST_FILE = blockHopper/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.stephen.blockHopper;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stephenO.blockHopper;
+				PRODUCT_NAME = blockHopper;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -550,9 +563,10 @@
 				INFOPLIST_FILE = blockHopper/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.stephen.blockHopper;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.stephenO.blockHopper;
+				PRODUCT_NAME = blockHopper;
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -564,7 +578,7 @@
 				INFOPLIST_FILE = blockHopperTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.makeschool.blockHopperTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = blockHopper;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/blockHopper.app/blockHopper";
 			};
 			name = Debug;
@@ -576,7 +590,7 @@
 				INFOPLIST_FILE = blockHopperTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.makeschool.blockHopperTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = blockHopper;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/blockHopper.app/blockHopper";
 			};
 			name = Release;
@@ -588,7 +602,7 @@
 				INFOPLIST_FILE = blockHopperUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.makeschool.blockHopperUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = blockHopper;
 				TEST_TARGET_NAME = blockHopper;
 			};
 			name = Debug;
@@ -599,7 +613,7 @@
 				INFOPLIST_FILE = blockHopperUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.makeschool.blockHopperUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = blockHopper;
 				TEST_TARGET_NAME = blockHopper;
 			};
 			name = Release;

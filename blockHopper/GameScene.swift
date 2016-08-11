@@ -52,19 +52,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var uiLayer: SKNode!
     var level: SKNode!
     var winLabel: SKLabelNode!
+    var goaLight: SKEmitterNode!
+    var instruction: SKLabelNode?
     var currentLevel = 0
     
     
     
     //initialize objects in game scene
-    var circle : Tool!
-    var square : Tool!
+    var platform1 : Tool!
+    var platform2 : Tool!
     var box : SKShapeNode!
     var dragObject: Tool?
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        view.showsPhysics = false
+        view.showsPhysics = true
         
         var path:String!
         switch currentLevel {
@@ -95,6 +97,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         restart = self.childNodeWithName(Constants.restartButton) as! MSButtonNode
         goal = level.childNodeWithName("//goal") as! SKSpriteNode
         winLabel = level.childNodeWithName("//winLabel") as! SKLabelNode
+        instruction = level.childNodeWithName("//instruction") as? SKLabelNode
         
         //sets up boundary so you can't go off-screen
         self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
@@ -107,9 +110,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         winLabel.userInteractionEnabled = false
         winLabel.alpha = 0
         
+        instruction?.userInteractionEnabled = false
+        instruction?.alpha = 0
+        
+        let delay = SKAction.waitForDuration(5)
+        let turnOnInstruction = SKAction.runBlock({
+            self.instruction?.alpha = 1
+            self.instruction?.zPosition = 10
+        })
+        let sequence = SKAction.sequence([delay, turnOnInstruction])
+        runAction(sequence)
+        
         restart.selectionBegan = {
             /* Grab reference to our SpriteKit view */
             let skView = self.view as SKView!
+            skView.showsFPS = true
+            skView.showsNodeCount = true
             
             /* Load Game scene */
             let scene = GameScene(fileNamed:"GameScene") as GameScene!
@@ -126,14 +142,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //generates space for tools to be in
         generateToolSpace()
-        
+                
         //generate circle object
-        circle = Tool(type: Tool.ToolType.circle, homePos: CGPoint(x: 60, y: 400))
-        level.addChild(circle)
+        platform1 = Tool(type: Tool.ToolType.platform1, homePos: CGPoint(x: 60, y: 400))
+        if currentLevel == 1 {
+            platform1.color = UIColor.grayColor()
+        }
+        level.addChild(platform1)
         
         //generate square object
-        square = Tool(type: Tool.ToolType.square, homePos: CGPoint(x: 60, y: 500))
-        level.addChild(square)
+        if currentLevel == 0 {
+        platform2 = Tool(type: Tool.ToolType.platform2, homePos: CGPoint(x: 60, y: 500))
+        level.addChild(platform2)
+        } else if currentLevel == 1 {
+            platform2 = Tool(type: Tool.ToolType.platform3, homePos: CGPoint(x: 60, y: 500))
+            level.addChild(platform2)
+        }
         
         
         /* Set physics contact delegate */
@@ -194,7 +218,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         box.physicsBody?.collisionBitMask = 2
         level.addChild(box)
     }
-    
     
     func burnBabyBurn(position : CGPoint, size: CGRect, fire: SKEmitterNode, length: CGVector) {
         let fire: SKEmitterNode = fire
@@ -306,9 +329,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //if buttons clicked, apply force corresponding to desired direction
         if goRight {
             player.physicsBody?.applyForce(CGVector(dx: 200, dy: 0))
-        } else if goLeft {
+        }
+        
+        if goLeft {
             player.physicsBody?.applyForce(CGVector(dx: -200, dy: 0))
-            
         }
         
         // caps jumping height
@@ -386,8 +410,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if nodeA.name == Constants.player && nodeB.name == "tool"
             || nodeA.name == "tool" && nodeB.name == Constants.player {
             
-            if nodeA == circle || nodeB == circle {
-                circle.bounce(player, circle: circle)
+            if nodeA == platform1 || nodeB == platform1 {
+                platform1.bounce(player, circle: platform1)
             }
             
             //is it node A?

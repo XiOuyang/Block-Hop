@@ -21,7 +21,7 @@ class Player: SKSpriteNode {
         if jumpCount < 1 {
             jumpAnimation()
 //            print("jump started")
-            lightingBitMask = 2
+            lightingBitMask = 1
             physicsBody?.applyImpulse(CGVectorMake(0, 700))
             jumpCount += 1
         }
@@ -62,7 +62,5 @@ class Player: SKSpriteNode {
         light.lightColor = UIColor.whiteColor()
         addChild(light)
     }
-
-    
     
 }
