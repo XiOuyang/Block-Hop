@@ -44,6 +44,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     //scene props
     var player: Player!
+    var background: SKSpriteNode!
     var goal: SKSpriteNode!
     var ground: SKSpriteNode!
     var crab1: SKSpriteNode!
@@ -89,7 +90,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         //how to add a sks file into a scene
         
         //sets up connections with scene props
-        uiLayer = self.childNodeWithName(Constants.hudLayer)!
+        uiLayer = camera!.childNodeWithName(Constants.hudLayer)!
         player = level.childNodeWithName("//" + Constants.player) as! Player
         ground = level.childNodeWithName("//" + Constants.ground) as! SKSpriteNode
         crab1 = level.childNodeWithName("//crab1") as? SKSpriteNode
@@ -97,14 +98,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         left = uiLayer.childNodeWithName(Constants.leftButton) as! MSButtonNode
         right = uiLayer.childNodeWithName(Constants.rightButton) as! MSButtonNode
         jump = uiLayer.childNodeWithName(Constants.jumpButton) as! MSButtonNode
-        restart = self.childNodeWithName(Constants.restartButton) as! MSButtonNode
+        restart = camera!.childNodeWithName(Constants.restartButton) as! MSButtonNode
         goal = level.childNodeWithName("//goal") as! SKSpriteNode
         winLabel = level.childNodeWithName("//winLabel") as! SKLabelNode
-        instruction = level.childNodeWithName("//instruction") as? SKLabelNode
+        background = level.childNodeWithName("//background") as! SKSpriteNode
         
         //sets up boundary so you can't go off-screen
-        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0, width: self.frame.size.width,
-            height: self.frame.size.height))
+        self.physicsBody = SKPhysicsBody(edgeLoopFromRect: CGRect(x: 0, y: 0,
+            width: background.frame.size.width,
+            height: background.frame.size.height))
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.dynamic = false
         
@@ -144,7 +146,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.createLight()
         
         //generates space for tools to be in
-        generateToolSpace()
+        //generateToolSpace()
         
         //generate circle object
         if currentLevel <= 1 {
@@ -217,20 +219,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.jump()
     }
     
-    func generateToolSpace () {
-        //generates space for the objects
-        box = SKShapeNode(rect:
-            CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height)
-            , cornerRadius: 30)
-        box.position = CGPoint(x: 0, y: ground.size.height)
-        box.zPosition = 1
-        box.fillColor = UIColor.whiteColor()
-        box.physicsBody = SKPhysicsBody(edgeLoopFromRect:
-            CGRect(x: 0, y: 0, width: 120, height:
-                frame.size.height - ground.size.height))
-        box.physicsBody?.collisionBitMask = 2
-        level.addChild(box)
-    }
+//    func generateToolSpace () {
+//        //generates space for the objects
+//        box = SKShapeNode(rect:
+//            CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height)
+//            , cornerRadius: 30)
+//        box.position = CGPoint(x: 0, y: ground.size.height)
+//        box.zPosition = 1
+//        box.fillColor = UIColor.whiteColor()
+//        box.physicsBody = SKPhysicsBody(edgeLoopFromRect:
+//            CGRect(x: 0, y: 0, width: 120, height:
+//                frame.size.height - ground.size.height))
+//        box.physicsBody?.collisionBitMask = 2
+//        camera!.addChild(box)
+//    }
     
     func burnBabyBurn(position : CGPoint, size: CGRect, fire: SKEmitterNode, length: CGVector) {
         let fire: SKEmitterNode = fire
@@ -346,6 +348,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if currentLevel == 2 {
             crabMovement()
+        }
+        if player.position.x > self.frame.size.width/2
+            && player.position.x < self.frame.size.width/2 {
+            camera!.position.x = player.position.x
+        }
+        if player.position.y > frame.size.height/2
+            && player.position.y < background.frame.size.height - frame.height/2 {
+            camera!.position.y = player.position.y
         }
     }
     
@@ -471,7 +481,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 currState = .Gameover
             }
             else if nodeB.name == "crab1"
-            || nodeB.name == "crab2" {
+                || nodeB.name == "crab2" {
                 
                 restart.state = .Active
                 currState = .Gameover
