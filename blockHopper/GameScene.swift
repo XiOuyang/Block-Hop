@@ -40,11 +40,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //keeps track of if you will move or not
     var goLeft: Bool = false
     var goRight: Bool = false
+    var crabInverse: Bool = false
     
     //scene props
     var player: Player!
     var goal: SKSpriteNode!
     var ground: SKSpriteNode!
+    var crab1: SKSpriteNode!
+    var crab2: SKSpriteNode!
     var left: MSButtonNode!
     var right: MSButtonNode!
     var jump: MSButtonNode!
@@ -55,8 +58,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var goaLight: SKEmitterNode!
     var instruction: SKLabelNode?
     var currentLevel = 0
-    
-    
     
     //initialize objects in game scene
     var platform1 : Tool!
@@ -76,8 +77,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         case 1:
             path = NSBundle.mainBundle().pathForResource("level1", ofType: "sks")!
             break
-            //        case 2:
-        //            path = NSBundle.mainBundle().pathForResource("level2", ofType: "sks")
+        case 2:
+            path = NSBundle.mainBundle().pathForResource("level2", ofType: "sks")!
         default:
             print("blah")
         }
@@ -89,8 +90,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //sets up connections with scene props
         uiLayer = self.childNodeWithName(Constants.hudLayer)!
-        player = self.level.childNodeWithName("//" + Constants.player) as! Player
-        ground = self.level.childNodeWithName("//" + Constants.ground) as! SKSpriteNode
+        player = level.childNodeWithName("//" + Constants.player) as! Player
+        ground = level.childNodeWithName("//" + Constants.ground) as! SKSpriteNode
+        crab1 = level.childNodeWithName("//crab1") as? SKSpriteNode
+        crab2 = level.childNodeWithName("//crab2") as? SKSpriteNode
         left = uiLayer.childNodeWithName(Constants.leftButton) as! MSButtonNode
         right = uiLayer.childNodeWithName(Constants.rightButton) as! MSButtonNode
         jump = uiLayer.childNodeWithName(Constants.jumpButton) as! MSButtonNode
@@ -131,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let scene = GameScene(fileNamed:"GameScene") as GameScene!
             
             /* Ensure correct aspect mode */
-            scene.scaleMode = .AspectFill
+            scene.scaleMode = .AspectFit
             
             /* Restart game scene */
             skView.presentScene(scene)
@@ -142,20 +145,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         //generates space for tools to be in
         generateToolSpace()
-                
+        
         //generate circle object
-        platform1 = Tool(type: Tool.ToolType.platform1, homePos: CGPoint(x: 60, y: 400))
-        if currentLevel == 1 {
-            platform1.color = UIColor.grayColor()
+        if currentLevel <= 1 {
+            platform1 = Tool(type: Tool.ToolType.platform1, homePos: CGPoint(x: 60, y: 400))
+            if currentLevel == 1 {
+                platform1.color = UIColor.grayColor()
+            }
+        }
+        else if currentLevel == 2 {
+            platform1 = Tool(type: Tool.ToolType.platform4, homePos: CGPoint(x: 60, y: 400))
         }
         level.addChild(platform1)
         
         //generate square object
         if currentLevel == 0 {
-        platform2 = Tool(type: Tool.ToolType.platform2, homePos: CGPoint(x: 60, y: 500))
-        level.addChild(platform2)
-        } else if currentLevel == 1 {
+            platform2 = Tool(type: Tool.ToolType.platform2, homePos: CGPoint(x: 60, y: 500))
+            level.addChild(platform2)
+        }
+        else if currentLevel == 1 {
             platform2 = Tool(type: Tool.ToolType.platform3, homePos: CGPoint(x: 60, y: 500))
+            level.addChild(platform2)
+        }
+        else if currentLevel == 2 {
+            platform2 = Tool(type: Tool.ToolType.platform4, homePos: CGPoint(x: 60, y: 500))
             level.addChild(platform2)
         }
         
@@ -288,35 +301,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             //looping through all children of the scene
             for node in level.children {
-                if node == tool || node == restart || node.name == "groundRect"
-                    || node.name == "flames" || node.name == "background"
-                    || node.name == "hill" || node.name == "volcano" {
-                    continue
-                }
-                
-                // sets up intersection check
-                let intersect : Bool = tool.intersectsNode(node)
                 
                 //if tool intersects another tool
-                
-                if  intersect {
-                    tool.position = tool.homePos
-                    tool.physicsBody?.collisionBitMask = 1
-                    tool.physicsBody?.affectedByGravity = false
-                    tool.physicsBody?.dynamic = false
+                if (node != dragObject && node is Tool) ||
+                    node.name == Constants.ground ||
+                    node.name == Constants.goal {
                     
-                    break
+                    // sets up intersection check
+                    let intersect : Bool = tool.intersectsNode(node)
+                    
+                    if  intersect {
+                        tool.position = tool.homePos
+                        tool.physicsBody?.collisionBitMask = 1
+                        tool.physicsBody?.affectedByGravity = false
+                        tool.physicsBody?.dynamic = false
+                        
+                        break
+                    }
+                    
+                    tool.toolAnimationEnd()
+                    tool.physicsBody?.collisionBitMask = 1
+                    tool.physicsBody?.dynamic = false
                 }
-                tool.toolAnimationEnd()
-                tool.physicsBody?.collisionBitMask = 1
-                tool.physicsBody?.dynamic = false
             }
         }
+        
         //change game state
         if currState == .Setup {
             currState = .Play
         }
         dragObject = nil
+        
     }
     
     
@@ -327,6 +342,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         /* Called before each frame is rendered */
         
         //if buttons clicked, apply force corresponding to desired direction
+        playerMovement()
+        
+        if currentLevel == 2 {
+            crabMovement()
+        }
+    }
+    
+    func crabMovement() {
+        
+        if crabInverse == false {
+            crab1.physicsBody?.applyForce(CGVector(dx: 50,
+                dy: CGFloat(arc4random_uniform(30))))
+            crab2.physicsBody?.applyForce(CGVector(dx: -50,
+                dy: CGFloat(arc4random_uniform(30))))
+            
+        } else if crabInverse == true {
+            crab1.physicsBody?.applyForce(CGVector(dx: -50,
+                dy: CGFloat(arc4random_uniform(30)) * -1))
+            crab2.physicsBody?.applyForce(CGVector(dx: 50,
+                dy: CGFloat(arc4random_uniform(30)) * -1))
+        }
+    }
+    
+    func playerMovement() {
         if goRight {
             player.physicsBody?.applyForce(CGVector(dx: 200, dy: 0))
         }
@@ -346,6 +385,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         } else if player.physicsBody?.velocity.dx < -200 {
             player.physicsBody?.velocity.dx = -200
         }
+        
+    }
+    
+    func hitGoal() {
+        if currentLevel == 2 {
+            winLabel.alpha = 1
+            restart.state = .Active
+            currState = .Gameover
+        }
+        
+        print("hit goal")
+        currentLevel += 1
+        print(currentLevel)
+        
+        if currentLevel < 3 {
+            /* Grab reference to our SpriteKit view */
+            let skView = self.view as SKView!
+            
+            /* Load Game scene */
+            let scene = GameScene(fileNamed:"GameScene") as GameScene!
+            
+            scene.currentLevel = currentLevel
+            
+            /* Ensure correct aspect mode */
+            scene.scaleMode = .AspectFit
+            
+            /* Show debug */
+            //skView.showsPhysics = true
+            skView.showsDrawCount = true
+            skView.showsFPS = true
+            
+            /* Start game scene */
+            skView.presentScene(scene)
+        }
     }
     
     func didBeginContact(contact: SKPhysicsContact) {
@@ -360,68 +433,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let nodeA = contactA.node!
         let nodeB = contactB.node!
         
-        //if player is touching goal, cannot jump
-        if nodeA.name == Constants.player && nodeB.name == Constants.goal || nodeA.name == Constants.goal
-            && nodeB.name == Constants.player {
-            
-            if currentLevel == 1 {
-                
-                winLabel.alpha = 1
-                restart.state = .Active
-                currState = .Gameover
-
-            }
-            print("hit goal")
-            currentLevel += 1
-            print(currentLevel)
-            
-            if currentLevel == 1 {
-                /* Grab reference to our SpriteKit view */
-                let skView = self.view as SKView!
-                
-                /* Load Game scene */
-                let scene = GameScene(fileNamed:"GameScene") as GameScene!
-                
-                scene.currentLevel = currentLevel
-                
-                /* Ensure correct aspect mode */
-                scene.scaleMode = .AspectFill
-                
-                /* Show debug */
-                //skView.showsPhysics = true
-                skView.showsDrawCount = true
-                skView.showsFPS = true
-                
-                /* Start game scene */
-                skView.presentScene(scene)
-            }
-            
-            //restart.state = .Active
-            //currState = .Gameover
-        }
-        
-        if nodeA.name == Constants.player && nodeB.name == Constants.ground
-            || nodeA.name == Constants.ground && nodeB.name == Constants.player {
-            player.jumpCount = 0
-            print(player.position)
-        }
-        
         //check collision
-        if nodeA.name == Constants.player && nodeB.name == "tool"
-            || nodeA.name == "tool" && nodeB.name == Constants.player {
-            
-            if nodeA == platform1 || nodeB == platform1 {
-                platform1.bounce(player, circle: platform1)
+        
+        checkCollision(nodeA, nodeB: nodeB)
+        checkCollision(nodeB, nodeB: nodeA)
+        
+        crabInverse = !crabInverse
+    }
+    
+    
+    func checkCollision(nodeA: SKNode, nodeB: SKNode) {
+        
+        if nodeA is Player {
+            //if player is touching goal
+            if nodeB.name == Constants.goal {
+                hitGoal()
             }
-            
-            //is it node A?
-            if let tool = nodeA as? Tool {
-                if player.position.y - (player.frame.size.height/2) > tool.position.y + (tool.frame.size.height/2) - 3 {
-                    player.jumpCount = 0
-                }
+            else if nodeB.name == Constants.ground {
+                player.jumpCount = 0
             }
-                //is it node B?
             else if let tool = nodeB as? Tool {
+                
+                if tool.type == Tool.ToolType.platform1 {
+                    platform1.bounce(player, circle: platform1)
+                }
                 
                 if player.position.y - (player.frame.size.height/2)
                     > tool.position.y + (tool.frame.size.height/2) - 3 {
@@ -429,40 +464,45 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     player.jumpCount = 0
                 }
             }
-        }
-        
-        if (nodeA.name == "flames" && nodeB.name == "player")
-            || (nodeA.name == "player" && nodeB.name == "flames") {
-            
-            print("game over")
-            restart.state = .Active
-            currState = .Gameover
-        }
-    }
-    
-    func didEndContact(contact: SKPhysicsContact) {
-        
-        if currState == .Gameover { return }
-        
-        let contactA:SKPhysicsBody = contact.bodyA
-        let contactB:SKPhysicsBody = contact.bodyB
-        
-        /* Get references to the physics body parent nodes */
-        let nodeA = contactA.node!
-        let nodeB = contactB.node!
-        
-        if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
-            
-            //is it node A?
-            if let tool = nodeA as? Tool {
-                tool.light()
+            else if nodeB.name == "flames" {
                 
-                //is it node B?
-            } else if let tool = nodeB as? Tool {
-                tool.light()
+                print("game over")
+                restart.state = .Active
+                currState = .Gameover
+            }
+            else if nodeB.name == "crab1"
+            || nodeB.name == "crab2" {
+                
+                restart.state = .Active
+                currState = .Gameover
             }
         }
     }
+    
+    
+    //    func didEndContact(contact: SKPhysicsContact) {
+    //
+    //        if currState == .Gameover { return }
+    //
+    //        let contactA:SKPhysicsBody = contact.bodyA
+    //        let contactB:SKPhysicsBody = contact.bodyB
+    //
+    //        /* Get references to the physics body parent nodes */
+    //        let nodeA = contactA.node!
+    //        let nodeB = contactB.node!
+    //
+    //        if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
+    //
+    //            //is it node A?
+    //            if let tool = nodeA as? Tool {
+    //                tool.light()
+    //
+    //                //is it node B?
+    //            } else if let tool = nodeB as? Tool {
+    //                tool.light()
+    //            }
+    //        }
+    //    }
 }
 
 

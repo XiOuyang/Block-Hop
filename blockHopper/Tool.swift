@@ -14,7 +14,7 @@ class Tool: SKSpriteNode {
     
     // types of tools
     enum ToolType {
-        case platform1, platform2, platform3
+        case platform1, platform2, platform3, platform4
     }
     //holds enum type
     var type : ToolType!
@@ -42,6 +42,11 @@ class Tool: SKSpriteNode {
             
         case .platform3:
             texture = SKTexture(imageNamed: "castleGround")
+            super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 70, height: 50))
+            break
+            
+        case .platform4:
+            texture = SKTexture(imageNamed: "sandGround")
             super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 70, height: 50))
         }
         
