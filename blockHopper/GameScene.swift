@@ -47,8 +47,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var background: SKSpriteNode!
     var goal: SKSpriteNode!
     var ground: SKSpriteNode!
-    var crab1: SKSpriteNode!
-    var crab2: SKSpriteNode!
+    var crab: SKSpriteNode!
+    var crabTexture: SKTexture!
     var left: MSButtonNode!
     var right: MSButtonNode!
     var jump: MSButtonNode!
@@ -56,9 +56,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var uiLayer: SKNode!
     var level: SKNode!
     var winLabel: SKLabelNode!
+    var loseLabel: SKLabelNode!
+    var goUp: SKLabelNode?
     var goaLight: SKEmitterNode!
     var instruction: SKLabelNode?
     var currentLevel = 0
+    
     
     //initialize objects in game scene
     var platform1 : Tool!
@@ -66,9 +69,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var box : SKShapeNode!
     var dragObject: Tool?
     
+    var meteor1: SKEmitterNode!
+    var meteor2: SKEmitterNode!
+    var meteor3: SKEmitterNode!
+    
+    var meteorHome1 = CGPoint(x: 400, y: 1500)
+    var meteorHome2 = CGPoint(x: 600, y: 1500)
+    var meteorHome3 = CGPoint(x: 800, y: 1500)
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        view.showsPhysics = true
+        view.showsPhysics = false
+        currentLevel = NSUserDefaults.standardUserDefaults().integerForKey("currentLevel")
         
         var path:String!
         switch currentLevel {
@@ -93,14 +105,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         uiLayer = camera!.childNodeWithName(Constants.hudLayer)!
         player = level.childNodeWithName("//" + Constants.player) as! Player
         ground = level.childNodeWithName("//" + Constants.ground) as! SKSpriteNode
-        crab1 = level.childNodeWithName("//crab1") as? SKSpriteNode
-        crab2 = level.childNodeWithName("//crab2") as? SKSpriteNode
+        //crab = level.childNodeWithName("//crab1") as? SKSpriteNode
         left = uiLayer.childNodeWithName(Constants.leftButton) as! MSButtonNode
         right = uiLayer.childNodeWithName(Constants.rightButton) as! MSButtonNode
         jump = uiLayer.childNodeWithName(Constants.jumpButton) as! MSButtonNode
         restart = camera!.childNodeWithName(Constants.restartButton) as! MSButtonNode
         goal = level.childNodeWithName("//goal") as! SKSpriteNode
         winLabel = level.childNodeWithName("//winLabel") as! SKLabelNode
+        loseLabel = level.childNodeWithName("//loseLabel") as! SKLabelNode
+        instruction = level.childNodeWithName("//instruction") as? SKLabelNode
+        goUp = level.childNodeWithName("//goUp") as? SKLabelNode
         background = level.childNodeWithName("//background") as! SKSpriteNode
         
         //sets up boundary so you can't go off-screen
@@ -110,10 +124,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.dynamic = false
         
-        restart.state = .Hidden
+        restart.state = .Active
         
         winLabel.userInteractionEnabled = false
         winLabel.alpha = 0
+        loseLabel.userInteractionEnabled = false
+        loseLabel.alpha = 0
+        goUp?.alpha = 1
         
         instruction?.userInteractionEnabled = false
         instruction?.alpha = 0
@@ -126,29 +143,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sequence = SKAction.sequence([delay, turnOnInstruction])
         runAction(sequence)
         
-        restart.selectionBegan = {
-            /* Grab reference to our SpriteKit view */
-            let skView = self.view as SKView!
-            skView.showsFPS = true
-            skView.showsNodeCount = true
-            
-            /* Load Game scene */
-            let scene = GameScene(fileNamed:"GameScene") as GameScene!
-            
-            /* Ensure correct aspect mode */
-            scene.scaleMode = .AspectFit
-            
-            /* Restart game scene */
-            skView.presentScene(scene)
-        }
+        restart.selectionBegan = clickRestart
         
         //adds light to middle of player block
         player.createLight()
+        if currentLevel == 2 {
+            meteor1 = createMeteors( meteorHome1)
+            meteor2 = createMeteors( meteorHome2)
+            meteor3 = createMeteors( meteorHome3)
+        }
         
-        //generates space for tools to be in
-        //generateToolSpace()
+        if currentLevel == 2 {
+            makeCrab(CGPoint(x: 618, y: 150), size: CGSize(width: 500, height: 350))
+        }
         
-        //generate circle object
+        //generate platform1 object
         if currentLevel <= 1 {
             platform1 = Tool(type: Tool.ToolType.platform1, homePos: CGPoint(x: 60, y: 400))
             if currentLevel == 1 {
@@ -160,7 +169,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         level.addChild(platform1)
         
-        //generate square object
+        //generate platform2 object
         if currentLevel == 0 {
             platform2 = Tool(type: Tool.ToolType.platform2, homePos: CGPoint(x: 60, y: 500))
             level.addChild(platform2)
@@ -208,6 +217,31 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func clickRestart() {
+        let delayRestart = SKAction.waitForDuration(0.7)
+        let restartScene = SKAction.runBlock ({
+            
+            /* Grab reference to our SpriteKit view */
+            let skView = self.view as SKView!
+            //
+            //            skView.showsFPS = true
+            //            skView.showsNodeCount = true
+            skView.showsPhysics = false
+            
+            /* Load Game scene */
+            let scene = GameScene(fileNamed:"GameScene") as GameScene!
+            
+            /* Ensure correct aspect mode */
+            scene.scaleMode = .AspectFit
+            
+            /* Restart game scene */
+            skView.presentScene(scene)
+        })
+        
+        let restartSequence = SKAction.sequence([delayRestart, restartScene])
+        self.runAction(restartSequence)
+    }
+    
     //move functions
     func leftStarted() {
         goLeft = player.moveLeft()
@@ -219,20 +253,49 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.jump()
     }
     
-//    func generateToolSpace () {
-//        //generates space for the objects
-//        box = SKShapeNode(rect:
-//            CGRect(x: 0, y: 0, width: 120, height: frame.size.height - ground.size.height)
-//            , cornerRadius: 30)
-//        box.position = CGPoint(x: 0, y: ground.size.height)
-//        box.zPosition = 1
-//        box.fillColor = UIColor.whiteColor()
-//        box.physicsBody = SKPhysicsBody(edgeLoopFromRect:
-//            CGRect(x: 0, y: 0, width: 120, height:
-//                frame.size.height - ground.size.height))
-//        box.physicsBody?.collisionBitMask = 2
-//        camera!.addChild(box)
-//    }
+    func makeCrab(position: CGPoint, size: CGSize) {
+        crab = SKSpriteNode(imageNamed: "crab")
+        crabTexture = SKTexture(imageNamed: "crab")
+        crab.physicsBody = SKPhysicsBody(texture: crabTexture, size: size)
+        crab.size = size
+        crab.zPosition = 1
+        crab.position = position
+        crab.physicsBody?.affectedByGravity = true
+        crab.physicsBody?.allowsRotation = false
+        crab.physicsBody?.categoryBitMask = 2
+        crab.physicsBody?.collisionBitMask = 9
+        crab.physicsBody?.contactTestBitMask = 9
+        crab.name = "crab"
+        level.addChild(crab)
+    }
+    
+    func createMeteors(position: CGPoint) -> SKEmitterNode {
+        var meteor = SKEmitterNode(fileNamed: "meteor")!
+        meteor.zPosition = 0
+        meteor.position = position
+        meteor.physicsBody = SKPhysicsBody(circleOfRadius: 25)
+        meteor.physicsBody?.affectedByGravity = false
+        meteor.physicsBody?.categoryBitMask = 0
+        meteor.physicsBody?.contactTestBitMask = 1
+        meteor.physicsBody?.collisionBitMask = 0
+        meteor.physicsBody?.velocity.dy = -400
+        level.addChild(meteor)
+        return meteor
+    }
+    
+    func checkMeteorPosition(meteor: SKEmitterNode, position: CGPoint) {
+        if meteor.position.y < scene?.position.y {
+            meteor.position = position
+            
+            
+            let delay = SKAction.waitForDuration(Double(arc4random_uniform(10)))
+            let fall = SKAction.runBlock({
+                meteor.physicsBody?.velocity.dy = -400
+            })
+            let moveMeteor = SKAction.sequence([delay, fall])
+            runAction(moveMeteor)
+        }
+    }
     
     func burnBabyBurn(position : CGPoint, size: CGRect, fire: SKEmitterNode, length: CGVector) {
         let fire: SKEmitterNode = fire
@@ -307,7 +370,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //if tool intersects another tool
                 if (node != dragObject && node is Tool) ||
                     node.name == Constants.ground ||
-                    node.name == Constants.goal {
+                    node.name == Constants.goal ||
+                    node.name == Constants.player ||
+                    node.name == "water" {
                     
                     // sets up intersection check
                     let intersect : Bool = tool.intersectsNode(node)
@@ -348,6 +413,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if currentLevel == 2 {
             crabMovement()
+            
+            checkMeteorPosition(meteor1, position: meteorHome1)
+            checkMeteorPosition(meteor2, position: meteorHome2)
+            checkMeteorPosition(meteor3, position: meteorHome3)
         }
         if player.position.x > self.frame.size.width/2
             && player.position.x < self.frame.size.width/2 {
@@ -362,16 +431,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func crabMovement() {
         
         if crabInverse == false {
-            crab1.physicsBody?.applyForce(CGVector(dx: 50,
-                dy: CGFloat(arc4random_uniform(30))))
-            crab2.physicsBody?.applyForce(CGVector(dx: -50,
-                dy: CGFloat(arc4random_uniform(30))))
+            crab.physicsBody?.applyForce(CGVector(dx: 1000, dy: 0))
             
         } else if crabInverse == true {
-            crab1.physicsBody?.applyForce(CGVector(dx: -50,
-                dy: CGFloat(arc4random_uniform(30)) * -1))
-            crab2.physicsBody?.applyForce(CGVector(dx: 50,
-                dy: CGFloat(arc4random_uniform(30)) * -1))
+            crab.physicsBody?.applyForce(CGVector(dx: -1000, dy: 0))
+            
         }
     }
     
@@ -401,12 +465,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func hitGoal() {
         if currentLevel == 2 {
             winLabel.alpha = 1
-            restart.state = .Active
             currState = .Gameover
         }
         
         print("hit goal")
         currentLevel += 1
+        if currentLevel == 3 {
+            currentLevel = 0
+        }
+        
+        NSUserDefaults.standardUserDefaults().setInteger(currentLevel, forKey: "currentLevel")
         print(currentLevel)
         
         if currentLevel < 3 {
@@ -422,9 +490,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scene.scaleMode = .AspectFit
             
             /* Show debug */
-            //skView.showsPhysics = true
-            skView.showsDrawCount = true
-            skView.showsFPS = true
+            skView.showsPhysics = false
+            skView.showsNodeCount = false
+            //            skView.showsDrawCount = true
+            //            skView.showsFPS = true
             
             /* Start game scene */
             skView.presentScene(scene)
@@ -448,7 +517,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         checkCollision(nodeA, nodeB: nodeB)
         checkCollision(nodeB, nodeB: nodeA)
         
-        crabInverse = !crabInverse
     }
     
     
@@ -476,43 +544,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             else if nodeB.name == "flames" {
                 
-                print("game over")
-                restart.state = .Active
+                loseLabel.alpha = 1
+                currState = .Gameover
+                
+            }
+            else if nodeB.name == "crab" {
+                
+                loseLabel.alpha = 1
                 currState = .Gameover
             }
-            else if nodeB.name == "crab1"
-                || nodeB.name == "crab2" {
+            else if nodeB.name == "meteor" {
                 
-                restart.state = .Active
+                loseLabel.alpha = 1
                 currState = .Gameover
             }
         }
+        if (nodeA.name == "crab" && nodeB.name == Constants.ground)
+            || (nodeA.name == "crab" && nodeB.name == "scene") {
+            crabInverse = !crabInverse
+        }
     }
-    
-    
-    //    func didEndContact(contact: SKPhysicsContact) {
-    //
-    //        if currState == .Gameover { return }
-    //
-    //        let contactA:SKPhysicsBody = contact.bodyA
-    //        let contactB:SKPhysicsBody = contact.bodyB
-    //
-    //        /* Get references to the physics body parent nodes */
-    //        let nodeA = contactA.node!
-    //        let nodeB = contactB.node!
-    //
-    //        if nodeA.name == "player" && nodeB.name == "tool" || nodeA.name == "tool" && nodeB.name == "player" {
-    //
-    //            //is it node A?
-    //            if let tool = nodeA as? Tool {
-    //                tool.light()
-    //
-    //                //is it node B?
-    //            } else if let tool = nodeB as? Tool {
-    //                tool.light()
-    //            }
-    //        }
-    //    }
 }
 
 

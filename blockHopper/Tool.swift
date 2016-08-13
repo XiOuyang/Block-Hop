@@ -32,22 +32,22 @@ class Tool: SKSpriteNode {
         //generates square
         case .platform2:
             texture = SKTexture(imageNamed: "grassGround")
-            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 70, height: 50))
+            super.init(texture: texture, color: UIColor.yellowColor(), size: CGSize(width: 90, height: 50))
             break
         //generates circle
         case .platform1:
             texture = SKTexture(imageNamed: "cloud3")
-            super.init(texture: texture, color: UIColor.whiteColor(), size: CGSize(width: 70, height: 70))
+            super.init(texture: texture, color: UIColor.whiteColor(), size: CGSize(width: 90, height: 70))
             break
             
         case .platform3:
             texture = SKTexture(imageNamed: "castleGround")
-            super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 70, height: 50))
+            super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 90, height: 50))
             break
             
         case .platform4:
             texture = SKTexture(imageNamed: "sandGround")
-            super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 70, height: 50))
+            super.init(texture: texture, color: UIColor.grayColor(), size: CGSize(width: 90, height: 50))
         }
         
         self.position = homePos
@@ -56,32 +56,12 @@ class Tool: SKSpriteNode {
         //sets properties of tools
         zPosition = 2
         physicsBody = SKPhysicsBody(texture: texture, size: frame.size)
-        physicsBody?.categoryBitMask = 1
+        physicsBody?.contactTestBitMask = 3
+        physicsBody?.collisionBitMask = 3
         physicsBody?.affectedByGravity = false
         physicsBody?.allowsRotation = false
         name =  "tool"
     }
-    
-//    func fireflyEffect(light: SKLightNode) {
-//        let particle = SKEmitterNode(fileNamed: "FireFly")!
-//        particle.position = CGPoint(x: 0, y: 0)
-//        particle.zPosition = 11
-//        particle.numParticlesToEmit = 55
-//        
-//        addChild(particle)
-//        
-//        let xPos = light.position.x - position.x
-//        let yPos = light.position.y - position.y
-//        let desiredAng = atan2(yPos, xPos)
-//        particle.emissionAngle = desiredAng
-//        
-//        let delay = SKAction.waitForDuration(2)
-//        let delete = SKAction.runBlock {
-//            particle.removeFromParent()
-//        }
-//        
-//        runAction(SKAction.sequence([delay, delete]))
-//    }
     
     func bounce(player: SKSpriteNode, circle: Tool) {
         let toolMid = circle.position.x
@@ -109,7 +89,7 @@ class Tool: SKSpriteNode {
     
         
     func toolAnimationStart() {
-        runAction(SKAction.scaleTo(1.5, duration: 0.4))
+        runAction(SKAction.scaleTo(2, duration: 0.4))
     }
     func toolAnimationEnd() {
         runAction(SKAction.scaleTo(1, duration: 0.4))

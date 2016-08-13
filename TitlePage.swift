@@ -35,9 +35,10 @@ class TitlePage: SKScene {
             scene.scaleMode = .AspectFit
             
             /* Show debug */
-            //skView.showsPhysics = true
+            skView.showsPhysics = false
             skView.showsDrawCount = false
             skView.showsFPS = false
+            skView.showsNodeCount = false
             
             /* Start game scene */
             skView.presentScene(scene)

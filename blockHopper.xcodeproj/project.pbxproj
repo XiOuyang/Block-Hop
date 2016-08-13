@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5D0689DD1D5E79000012E0D5 /* return.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D0689DC1D5E79000012E0D5 /* return.png */; };
+		5D0689DF1D5E84150012E0D5 /* meteor.sks in Resources */ = {isa = PBXBuildFile; fileRef = 5D0689DE1D5E84150012E0D5 /* meteor.sks */; };
+		5D0689E11D5EB2AE0012E0D5 /* arrowUp.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D0689E01D5EB2AE0012E0D5 /* arrowUp.png */; };
 		5D09ED321D5A7A2A0047E451 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D09ED311D5A7A2A0047E451 /* spark.png */; };
 		5D09ED341D5A7B880047E451 /* square.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D09ED331D5A7B880047E451 /* square.png */; };
 		5D26C6BA1D5CE65F00DFCB7C /* tower_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D26C6B91D5CE65F00DFCB7C /* tower_grey.png */; };
@@ -70,6 +73,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5D0689DC1D5E79000012E0D5 /* return.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = return.png; sourceTree = "<group>"; };
+		5D0689DE1D5E84150012E0D5 /* meteor.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = meteor.sks; sourceTree = "<group>"; };
+		5D0689E01D5EB2AE0012E0D5 /* arrowUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowUp.png; sourceTree = "<group>"; };
 		5D09ED311D5A7A2A0047E451 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		5D09ED331D5A7B880047E451 /* square.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = square.png; sourceTree = "<group>"; };
 		5D26C6B91D5CE65F00DFCB7C /* tower_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tower_grey.png; sourceTree = "<group>"; };
@@ -172,6 +178,7 @@
 				5DF4B4D61D4C161D00B4827C /* level2.sks */,
 				5DDF71FD1D5109500030E76B /* level1.sks */,
 				5DEF2F921D513DFC00AECF74 /* fire.sks */,
+				5D0689DE1D5E84150012E0D5 /* meteor.sks */,
 				5DF3F9CB1D4C1CD600DCFA34 /* GameScene.sks */,
 				5DEF3DE61D46D0C300C89E5E /* TitlePage.sks */,
 				5DF4B4D41D4BD88200B4827C /* Tutorial.sks */,
@@ -187,11 +194,13 @@
 				5D6438EE1D36D8F200376F0B /* Main.storyboard */,
 				5D6438F11D36D8F200376F0B /* Assets.xcassets */,
 				5D6438F31D36D8F200376F0B /* LaunchScreen.storyboard */,
+				5D0689E01D5EB2AE0012E0D5 /* arrowUp.png */,
 				5D09ED331D5A7B880047E451 /* square.png */,
 				5D09ED311D5A7A2A0047E451 /* spark.png */,
 				5DF610891D5BF08E007E7B11 /* crab.png */,
 				5D6438F61D36D8F200376F0B /* Info.plist */,
 				5DEF3DE81D46D7DF00C89E5E /* rect.png */,
+				5D0689DC1D5E79000012E0D5 /* return.png */,
 				5DF03AE41D48340D005417AF /* rightRect.png */,
 				5DF03AE61D483427005417AF /* leftRect.png */,
 				5DF03AEA1D4834FA005417AF /* stationaryRect.png */,
@@ -340,6 +349,7 @@
 			files = (
 				5DF03AE51D48340D005417AF /* rightRect.png in Resources */,
 				5D09ED341D5A7B880047E451 /* square.png in Resources */,
+				5D0689E11D5EB2AE0012E0D5 /* arrowUp.png in Resources */,
 				5DE36CB41D53EB2A00C1AF64 /* house_beige_front.png in Resources */,
 				5DF610881D5BDB27007E7B11 /* moon_full.png in Resources */,
 				5DEF3DE91D46D7DF00C89E5E /* rect.png in Resources */,
@@ -353,12 +363,14 @@
 				5DF03AE71D483427005417AF /* leftRect.png in Resources */,
 				5D6438F51D36D8F200376F0B /* LaunchScreen.storyboard in Resources */,
 				5DF3C8071D428B7F00F8ACD9 /* FireFly.sks in Resources */,
+				5D0689DF1D5E84150012E0D5 /* meteor.sks in Resources */,
 				5DB3F78C1D551EDF0045BFE1 /* lv1Background.png in Resources */,
 				5DDF71FE1D5109500030E76B /* level1.sks in Resources */,
 				5DF21AB71D541F560068FDBA /* hills2.png in Resources */,
 				5D26C6BA1D5CE65F00DFCB7C /* tower_grey.png in Resources */,
 				5DF03AEB1D4834FA005417AF /* stationaryRect.png in Resources */,
 				5DF6108A1D5BF08E007E7B11 /* crab.png in Resources */,
+				5D0689DD1D5E79000012E0D5 /* return.png in Resources */,
 				5DEE85B71D54F1550039A004 /* buttonLeft.png in Resources */,
 				5DEF3DE71D46D0C300C89E5E /* TitlePage.sks in Resources */,
 				5D98634F1D5BD12200ADE9D5 /* lv2Background.png in Resources */,
